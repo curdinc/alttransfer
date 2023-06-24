@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ["alttransfer"],
+  extends: ["alttransfer", "plugin:@tanstack/eslint-plugin-query/recommended"],
   parserOptions: {
     project: true,
     tsconfigRootDir: __dirname,
