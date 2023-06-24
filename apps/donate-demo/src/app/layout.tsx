@@ -1,3 +1,4 @@
+import '@alttransfer/cross-chain-payment-react-sdk/dist/index.css';
 import { Providers } from "./providers";
 
 export const metadata = {
