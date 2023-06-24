@@ -1,18 +1,24 @@
 {
   "name": "@alttransfer/cross-chain-payment-core",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsup src/index.ts --env.ESM_ONLY true",
     "build-packages": "pnpm build",
-    "dev": "tsup src/index.ts --watch",
+    "dev": "tsup src/index.ts --env.ESM_ONLY true --watch",
     "lint": "eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
@@ -29,5 +35,13 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@lifi/sdk": "^2.0.1",
+    "@uniswap/sdk-core": "^3.2.6",
+    "@uniswap/smart-order-router": "3.13.2-hotfix2",
+    "@uniswap/v3-sdk": "^3.9.0",
+    "ethers": "^5.7.2",
+    "zod": "^3.21.4"
   }
 }

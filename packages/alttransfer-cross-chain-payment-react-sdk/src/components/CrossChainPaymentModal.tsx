@@ -51,7 +51,6 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
   const [curChain, setCurChain] = React.useState("Fantom");
 
-
   const renderPage = () => {
     switch (currentScreen) {
       case pages.HomeScreen:
@@ -90,5 +89,6 @@ const PaymentModal: React.FC<modalProps> = (props) => {
         <Dialog.Overlay className="DialogOverlay" />
         {renderPage()}
       </Dialog.Portal>
-    </Dialog.Root>);
-}
+    </Dialog.Root>
+  );
+};

@@ -18,9 +18,9 @@ export type AltTransferCrossChainSdkConstructorArgs = {
       }
   >;
   getRecipientAddress(this: void): Promise<{ address: string }>;
-  
+
   config: {
-    ChainAPIs: Record<SupportedChainIds, string>
+    ChainAPIs: Record<SupportedChainIds, string>;
   };
 };
 
@@ -28,7 +28,6 @@ export class AltTransferCrossChainSdk {
   private getItemPrice: AltTransferCrossChainSdkConstructorArgs["getItemPrice"];
   private getRecipientAddress: AltTransferCrossChainSdkConstructorArgs["getRecipientAddress"];
   private config: AltTransferCrossChainSdkConstructorArgs["config"];
-
   /**
    * @example
    * const sdk = AltTransferCrossChainPaymentSdk({
@@ -78,14 +77,16 @@ export class AltTransferCrossChainSdk {
     chainId: SupportedChainIds;
     address: string;
   }) {
-    await Promise.resolve();
-    console.log("chainId, address", chainId, address);
     // todo: call Quicknode or alchemy api to get user token list
-    const provider = new ethers.providers.JsonRpcProvider(this.config.ChainAPIs[chainId]);
-    const tokens = await provider.send("qn_getWalletTokenBalance", [{wallet: address}]);
-    var token_list = tokens.result;
-    var usable_tokens : Array<TokenInfo> = token_list.map((token : any) =>
-    ({address: token.address,
+    const provider = new ethers.providers.JsonRpcProvider(
+      this.config.ChainAPIs[chainId]
+    );
+    const tokens = await provider.send("qn_getWalletTokenBalance", [
+      { wallet: address },
+    ]);
+    const token_list = tokens.result;
+    const usable_tokens: Array<TokenInfo> = token_list.map((token: any) => ({
+      address: token.address,
       decimals: token.decimals,
       name: token.name,
       symbol: token.symbol,
@@ -93,11 +94,11 @@ export class AltTransferCrossChainSdk {
       chainId: chainId,
       tokenUri: "",
       balanceUsdValueCents: "",
-      tokenExchangeUsdValueCents: ""
-    }))
-  // todo: contrast this list with those that has liquidity on the right liquidity pool base on the current chain
-  return usable_tokens;
-}
+      tokenExchangeUsdValueCents: "",
+    }));
+    // todo: contrast this list with those that has liquidity on the right liquidity pool base on the current chain
+    return usable_tokens;
+  }
 
   /**
    * Returns the price of the item that the user is purchasing.

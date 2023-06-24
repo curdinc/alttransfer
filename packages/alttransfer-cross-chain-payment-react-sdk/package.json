@@ -1,18 +1,25 @@
 {
   "name": "@alttransfer/cross-chain-payment-react-sdk",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./index.css": "./dist/index.css"
+  },
   "scripts": {
-    "build": "tsup src/index.tsx --external react",
+    "build": "tsup src/index.tsx --env.ESM_ONLY true --external react",
     "build-packages": "pnpm build",
-    "dev": "tsup src/index.tsx --external react --watch",
+    "dev": "tsup src/index.tsx --env.ESM_ONLY true --external react --watch",
     "lint": "eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
