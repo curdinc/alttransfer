@@ -1,0 +1,256 @@
+/* @import "/node_modules/@radix-ui/colors/black-alpha.css";
+@import "/node_modules/@radix-ui/colors/mauve.css";
+@import "/node_modules/@radix-ui/colors/slate.css";
+@import "/node_modules/@radix-ui/colors/sky.css";
+@import "/node_modules/@radix-ui/colors/indigo.css";
+@import "/node_modules/@radix-ui/colors/violet.css"; */
+
+:root {
+  /* Needed for icons */
+  --ck-brand-walletConnect: #3b99fc;
+  --ck-brand-coinbaseWallet: #0052ff;
+  --ck-brand-metamask: #f6851b;
+  --ck-brand-metamask-01: #f6851b;
+  --ck-brand-metamask-02: #e2761b;
+  --ck-brand-metamask-03: #cd6116;
+  --ck-brand-metamask-04: #161616;
+  --ck-brand-metamask-05: #763d16;
+  --ck-brand-metamask-06: #d7c1b3;
+  --ck-brand-metamask-07: #c0ad9e;
+  --ck-brand-metamask-08: #e4761b;
+  --ck-brand-metamask-09: #233447;
+  --ck-brand-metamask-10: #e4751f;
+  --ck-brand-metamask-11: #fef5e7;
+  --ck-brand-metamask-12: #e3c8ab;
+
+  --primary: rgba(96, 47, 230, 0.9);
+  --primary-hover: rgb(115, 59, 255);
+  --primary-shadow: rgba(55, 23, 159, 0.8);
+
+  --secondary: rgba(94, 98, 137, 0.4);
+  --secondary-hover: rgba(94, 98, 137, 0.8);
+
+  --primary-text: #dde1e6;
+  --secondary-text: #d1d2d7;
+  --tertiary-text: #a0a0a0;
+
+  --background: #2b2e3c;
+  --background-secondary: rgba(22, 24, 36, 0.6);
+
+  --border-emphasis: rgb(104, 112, 118);
+
+  --black-a7: hsla(0, 0%, 0%, 0.141);
+  --black-a8: hsla(0, 0%, 0%, 0.22);
+}
+
+/* reset */
+button,
+fieldset,
+input {
+  all: unset;
+}
+
+p {
+  color: var(--secondary-text);
+}
+
+.DialogOverlay {
+  background-color: var(--black-a8);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+  background: rgb(43, 46, 60);
+  background: linear-gradient(
+    151deg,
+    rgba(43, 46, 60, 1) 8%,
+    rgba(17, 19, 28, 1) 97%
+  );
+  border-radius: 1em;
+  border: 1px solid var(--border-emphasis);
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 400px;
+  max-height: 85vh;
+  padding: 25px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.DialogContent:focus {
+  outline: none;
+}
+
+.DialogContent > * {
+  margin-bottom: 1em;
+}
+
+.DialogHeading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2em;
+  justify-content: space-between;
+  color: var(--primary-text);
+}
+
+.DialogTitle {
+  margin: 0;
+  font-weight: 500;
+  color: var(--primary-text);
+  font-size: 1.75em;
+}
+
+.DialogDescription {
+  color: var(--mauve-11);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.Button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10em;
+  width: 60%;
+  padding: 0.25em 1em;
+  font-size: 1.25em;
+  line-height: 1;
+  font-weight: 500;
+  height: 35px;
+  transition: background-color 0.3s ease-in-out;
+  background: var(--primary-shadow);
+  background: linear-gradient(
+    0deg,
+    var(--primary-shadow) 3%,
+    var(--primary) 93%
+  );
+  color: var(--primary-text);
+}
+.Button:hover {
+  background-color: var(--primary-hover);
+}
+
+.Button:focus {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.IconButton {
+  font-family: inherit;
+  border-radius: 0.5em;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-text);
+}
+.IconButton:hover {
+  background-color: var(--border-emphasis);
+}
+
+.headerText {
+  font-size: 1em;
+}
+
+/* TOKEN SELECT */
+.Fieldset {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.Label {
+  font-size: 15px;
+  color: var(--border-emphasis);
+  width: 90px;
+  text-align: right;
+}
+
+.Input {
+  width: 100%;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5em;
+  padding: 0.5em 1.5em;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--secondary-text);
+  box-shadow: 0 0 0 1px var(--border-emphasis);
+  transition: box-shadow 0.15s ease-in-out;
+  height: 35px;
+}
+.Input:focus {
+  box-shadow: 0 0 0 1.5px var(--border-emphasis);
+}
+
+/* HOMEPAGE */
+.HomepageCostSelectorContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.75em;
+  padding: 1em 1em;
+  gap: 1em;
+  box-shadow: 0 0 0 1px var(--border-emphasis);
+  box-sizing: border-box;
+  background-color: var(--background-secondary);
+}
+
+.HomepageSelectButton {
+  padding: 0.25em 1em;
+  border-radius: 1.2em;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  color: var(--primary-text);
+  transition: background-color 0.175s ease-in-out;
+  background-color: var(--secondary);
+}
+.HomepageSelectButton:hover:not([disabled]),
+.HomepageSelectButton:active:not([disabled]) {
+  background-color: var(--secondary-hover);
+}
+
+/* MODIFY WALLET */
+.ModifyWalletButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.5em;
+  padding: 0.75em 1em;
+  box-shadow: 0 0 0 1px var(--border-emphasis);
+  transition: background-color 0.15s ease-in-out;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--primary-text);
+}
+
+.ModifyWalletButton:hover {
+  background-color: var(--secondary-hover);
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
