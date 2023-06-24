@@ -12,5 +12,4 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "tailwindCSS.experimental.configFile": "./packages/config/tailwind/index.ts",
-  "prettier.prettierPath": "./node_modules/prettier"
 }
