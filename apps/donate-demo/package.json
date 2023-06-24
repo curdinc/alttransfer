@@ -12,8 +12,8 @@
     "next": "^13.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "viem": "~0.3.36",
-    "wagmi": "^1.0.6"
+    "viem": "~1.1.6",
+    "wagmi": "^1.2.1"
   },
   "devDependencies": {
     "@alttransfer/tsconfig": "^0.0.0",
