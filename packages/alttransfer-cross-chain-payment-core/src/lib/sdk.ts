@@ -83,6 +83,9 @@ export class AltTransferCrossChainSdk {
     throw new Error("Not implemented");
   }
 
+  /**
+   * Returns the price of the item that the user is purchasing.
+   */
   async getItemPriceInfo(): Promise<TokenInfo> {
     const itemPrice = await this.getItemPrice();
     // todo: fetch the token info and remove below
@@ -98,7 +101,10 @@ export class AltTransferCrossChainSdk {
     };
   }
 
-  async getTargetAddress(): Promise<string> {
+  /**
+   * Returns the address that the user is sending funds to.
+   */
+  async getDestinationAddress(): Promise<string> {
     const recipientAddress = await this.getRecipientAddress();
     return recipientAddress.address;
   }

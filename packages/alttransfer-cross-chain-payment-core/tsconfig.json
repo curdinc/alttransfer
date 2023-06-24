@@ -1,5 +1,5 @@
 {
   "extends": "@alttransfer/tsconfig/react-library.json",
-  "include": ["./src"],
+  "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
 }

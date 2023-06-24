@@ -1,14 +1,8 @@
 import type { AltTransferCrossChainSdkConstructorArgs } from "@alttransfer/cross-chain-payment-core";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as React from "react";
-import {
-  CrossChainPaymentProvider,
-  useCrossChainPayment,
-} from "./CrossChainPaymentContext";
+import { useDestinationInfo } from "../hooks/useDestinationInfo";
+import { CrossChainPaymentProvider } from "./CrossChainPaymentContext";
 
 const queryClient = new QueryClient();
 
@@ -33,25 +27,15 @@ export function AltTransferCrossChainPaymentModal(
 }
 
 function PaymentModal({ children }: { children: React.ReactNode }) {
-  const { sdk } = useCrossChainPayment();
-  const {
-    data: destinationInfo,
-    isLoading: isLoadingDestinationInfo,
-    error: destinationError,
-  } = useQuery({
-    queryKey: ["getDestinationInfo"],
-    queryFn: async () => {
-      const itemInfo = await sdk.getItemPriceInfo();
-      const recipientInfo = await sdk.getDestinationAddress();
-      return { itemInfo, recipientInfo };
-    },
-  });
+  const { isLoadingDestinationInfo, destinationInfo, destinationError } =
+    useDestinationInfo();
 
   console.log("destinationInfo", destinationInfo);
+  console.log("isLoadingDestinationInfo", isLoadingDestinationInfo);
 
   if (destinationError) {
     console.error(destinationError);
-    return <div>Something went wrong fetching </div>;
+    return <div>Something went wrong fetching payment information</div>;
   }
 
   return <div>{children}</div>;

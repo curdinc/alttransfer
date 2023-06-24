@@ -10,9 +10,9 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx",
+    "build": "tsup src/index.ts",
     "build-packages": "pnpm build",
-    "dev": "tsup src/index.tsx ---watch",
+    "dev": "tsup src/index.ts --watch",
     "lint": "eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
