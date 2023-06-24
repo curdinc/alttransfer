@@ -247,3 +247,12 @@ const receipt = await sdk.pay({
   optimisticSettlement: false,
 })
 ```
+
+## Local development
+
+Clone the repo and run the following command
+
+```bash
+pnpm i && pnpm build-packages
+pnpm dev
+```
