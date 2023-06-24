@@ -7,7 +7,12 @@ export default function Page() {
     <div>
       <AltTransferCrossChainPaymentModal
         config={{
-          quickNodeApiKey: "",
+          ChainAPIs: {
+            "0x1": "https://solemn-holy-layer.quiknode.pro/859bd0ec14bf3fa09445f2ceddbd9cef5c5f436c/",
+            "0x89": "",
+            "0xa": "",
+            "0xa4b1": ""
+          }
         }}
         getItemPrice={async () => {
           return Promise.resolve({
