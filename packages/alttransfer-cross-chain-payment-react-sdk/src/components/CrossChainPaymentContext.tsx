@@ -23,7 +23,6 @@ const CrossChainContext = createContext<{
     },
   }),
 });
-
 export function CrossChainPaymentProvider({
   children,
   config,

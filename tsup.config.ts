@@ -10,6 +10,5 @@ export default defineConfig((options) => {
     minify: !options.watch,
     // Internal packages not meant for client consumption should be here
     noExternal: [],
-    external: ["react"],
   };
 });
