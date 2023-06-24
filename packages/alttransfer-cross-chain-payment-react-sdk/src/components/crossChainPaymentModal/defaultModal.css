@@ -1,9 +1,6 @@
-/* @import "/node_modules/@radix-ui/colors/black-alpha.css";
-@import "/node_modules/@radix-ui/colors/mauve.css";
-@import "/node_modules/@radix-ui/colors/slate.css";
-@import "/node_modules/@radix-ui/colors/sky.css";
-@import "/node_modules/@radix-ui/colors/indigo.css";
-@import "/node_modules/@radix-ui/colors/violet.css"; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   /* Needed for icons */
