@@ -1,4 +1,9 @@
 import { z } from "zod";
 
-export const SupportedChainIdsSchema = z.enum(["0x89", "0xa", "0xa4b1", "0x1"]);
+export const SupportedChainIdsSchema = z.enum([
+  "0x89", //polygon
+  "0xa", //optimism
+  "0xa4b1", //arbitrum
+  "0x1", //ethereum
+]);
 export type SupportedChainIds = z.infer<typeof SupportedChainIdsSchema>;

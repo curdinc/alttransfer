@@ -3,10 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as React from "react";
 import { useDestinationInfo } from "../hooks/useDestinationInfo";
-import {
-  CrossChainPaymentProvider,
-  useCrossChainPayment,
-} from "./CrossChainPaymentContext";
+import { CrossChainPaymentProvider } from "./CrossChainPaymentContext";
 import "./crossChainPaymentModal/defaultModal.css";
 import HomePage from "./crossChainPaymentModal/homepage";
 import ModifyWallet from "./crossChainPaymentModal/modifyWallet";
@@ -53,16 +50,6 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     useDestinationInfo();
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
   const [curChain, setCurChain] = React.useState("Fantom");
-
-  const { sdk } = useCrossChainPayment();
-  sdk
-    .getUsableCurrencies({
-      address: "0xb1f8e55c7f64d203c1400b9d8555d050f94adf39",
-      chainId: "0xa4b1",
-    })
-    .catch((e) => {
-      console.log("error getting usable currency", e);
-    });
 
   const renderPage = () => {
     switch (currentScreen) {
