@@ -1,5 +1,5 @@
 {
-  "name": "@alttransfer/utils",
+  "name": "@alttransfer/cross-chain-payment-core",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -18,13 +18,14 @@
   },
   "devDependencies": {
     "@alttransfer/tsconfig": "^0.0.0",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.4",
     "eslint": "^8.29.0",
     "eslint-config-alttransfer": "^0.0.0",
-    "react": "^18.2.0",
     "tsup": "^7.0.0",
-    "typescript": "^5.1.3"
+    "typescript": "^5.1.3",
+    "viem": "~1.1.6"
+  },
+  "peerDependencies": {
+    "viem": "~1.1.6"
   },
   "publishConfig": {
     "access": "public"
