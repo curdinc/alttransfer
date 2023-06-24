@@ -26,11 +26,13 @@ export async function getQuote({
   toToken,
   hexChainId,
   userAddress,
+  alchemyApiKey,
 }: {
   fromToken: TokenInfo;
   toToken?: TokenInfo;
   hexChainId: SupportedChainIds;
   userAddress: string;
+  alchemyApiKey: string;
 }) {
   const route = await generateRoute({
     fromToken,
@@ -47,6 +49,7 @@ export async function getQuote({
     toAmount: "1000000",
     hexChainId: hexChainId,
     userAddress,
+    alchemyApiKey,
   });
   console.log("route", route);
 }
@@ -57,16 +60,19 @@ export async function generateRoute({
   toAmount,
   hexChainId,
   userAddress,
+  alchemyApiKey,
 }: {
   fromToken: TokenInfo;
   toToken: TokenInfo;
   toAmount: string;
   hexChainId: SupportedChainIds;
   userAddress: string;
+  alchemyApiKey: string;
 }): Promise<SwapRoute | null> {
+  console.log("parseInt(hexChainId),", parseInt(hexChainId));
   const router = new AlphaRouter({
     chainId: parseInt(hexChainId),
-    provider: new ethers.providers.JsonRpcProvider(""),
+    provider: new ethers.providers.AlchemyProvider(undefined, alchemyApiKey),
   });
 
   const options: SwapOptionsSwapRouter02 = {
@@ -76,24 +82,30 @@ export async function generateRoute({
     type: SwapType.SWAP_ROUTER_02,
   };
 
-  const route = await router.route(
-    CurrencyAmount.fromRawAmount(
-      new Token(
-        parseInt(hexChainId),
-        toToken.address,
-        toToken.decimals,
-        toToken.symbol,
-        toToken.name
-      ),
-      toAmount
-    ),
+  const amount = CurrencyAmount.fromRawAmount(
     new Token(
       parseInt(hexChainId),
-      fromToken.address,
-      fromToken.decimals,
-      fromToken.symbol,
-      fromToken.name
+      toToken.address,
+      toToken.decimals,
+      toToken.symbol,
+      toToken.name
     ),
+    toAmount
+  );
+
+  console.log("fromToken", fromToken);
+  const targetToken = new Token(
+    parseInt(hexChainId),
+    fromToken.address,
+    fromToken.decimals,
+    fromToken.symbol,
+    fromToken.name
+  );
+  console.log("targetToken", targetToken);
+
+  const route = await router.route(
+    amount,
+    targetToken,
     TradeType.EXACT_OUTPUT,
     options
   );

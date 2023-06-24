@@ -12,11 +12,67 @@ export default function SelectToken({
 }) {
   const { currencies, currenciesError, isLoadingCurrencies } =
     useUserCurrencies();
-  console.log(currencies);
-  if (isLoadingCurrencies) return <div>Loading...</div>;
+  console.log("currencies", currencies);
+  if (isLoadingCurrencies) {
+    return (
+      <Dialog.Content className="DialogContent">
+        <div className="DialogHeading">
+          <button
+            className="IconButton"
+            aria-label="Back"
+            onClick={() => {
+              setCurrentScreen(pages.HomeScreen);
+            }}
+          >
+            <LeftIconButton />
+          </button>
+          <Dialog.Title className="DialogTitle">Select token</Dialog.Title>
+          <Dialog.Close asChild>
+            <button className="IconButton" aria-label="Close">
+              <CrossIconButton />
+            </button>
+          </Dialog.Close>
+        </div>
+        <div
+          style={{
+            color: "white",
+          }}
+        >
+          Loading...
+        </div>
+      </Dialog.Content>
+    );
+  }
   if (currenciesError) {
     console.error(currenciesError);
-    return <div>Error loading user currencies</div>;
+    return (
+      <Dialog.Content className="DialogContent">
+        <div className="DialogHeading">
+          <button
+            className="IconButton"
+            aria-label="Back"
+            onClick={() => {
+              setCurrentScreen(pages.HomeScreen);
+            }}
+          >
+            <LeftIconButton />
+          </button>
+          <Dialog.Title className="DialogTitle">Select token</Dialog.Title>
+          <Dialog.Close asChild>
+            <button className="IconButton" aria-label="Close">
+              <CrossIconButton />
+            </button>
+          </Dialog.Close>
+        </div>
+        <div
+          style={{
+            color: "white",
+          }}
+        >
+          Error loading user currencies
+        </div>
+      </Dialog.Content>
+    );
   }
   return (
     <Dialog.Content className="DialogContent">

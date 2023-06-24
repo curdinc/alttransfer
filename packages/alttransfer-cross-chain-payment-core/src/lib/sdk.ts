@@ -1,5 +1,10 @@
 import { ethers } from "ethers";
 import type { WalletClient } from "viem";
+import {
+  getTokenMetadata,
+  getUserTokenBalance,
+} from "../services/alchemy/getUserTokenBalance";
+import { getQuote } from "../services/uniswap/getQuote";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";
 
@@ -21,6 +26,7 @@ export type AltTransferCrossChainSdkConstructorArgs = {
 
   config: {
     ChainAPIs: Record<SupportedChainIds, string>;
+    alchemyApiKey: string;
   };
 };
 
@@ -78,26 +84,99 @@ export class AltTransferCrossChainSdk {
     address: string;
   }) {
     // todo: call Quicknode or alchemy api to get user token list
-    const provider = new ethers.providers.JsonRpcProvider(
-      this.config.ChainAPIs[chainId]
-    );
-    const tokens = await provider.send("qn_getWalletTokenBalance", [
-      { wallet: address },
-    ]);
-    const token_list = tokens.result;
-    const usable_tokens: Array<TokenInfo> = token_list.map((token: any) => ({
-      address: token.address,
-      decimals: token.decimals,
-      name: token.name,
-      symbol: token.symbol,
-      balance: token.totalBalance,
-      chainId: chainId,
-      tokenUri: "",
-      balanceUsdValueCents: "",
-      tokenExchangeUsdValueCents: "",
-    }));
-    // todo: contrast this list with those that has liquidity on the right liquidity pool base on the current chain
-    return usable_tokens;
+    let tokens: TokenInfo[] = [];
+
+    if (chainId === "0xa" || chainId === "0xa4b1") {
+      const tokenList = await getUserTokenBalance(
+        chainId,
+        address,
+        this.config.alchemyApiKey
+      );
+
+      tokens = await Promise.all(
+        tokenList
+          .filter((token) => !!token.logo)
+          .map(async (token) => {
+            const result = {
+              address: token.contractAddress,
+              decimals: token.decimals ?? 18,
+              name: token.name ?? "",
+              symbol: token.symbol ?? "",
+              balance: token.tokenBalance ?? "0",
+              chainId: chainId,
+              tokenUri: token.logo ?? undefined,
+              balanceUsdValueCents: "",
+              tokenExchangeUsdValueCents: "",
+            };
+            const quote = await getQuote({
+              fromToken: result,
+              hexChainId: chainId,
+              userAddress: address,
+              alchemyApiKey: this.config.alchemyApiKey,
+            });
+
+            console.log("quote", quote);
+            return result;
+          })
+      );
+    } else {
+      const provider = new ethers.providers.JsonRpcProvider(
+        this.config.ChainAPIs[chainId]
+      );
+      const tokenList = await provider.send("qn_getWalletTokenBalance", [
+        { wallet: address },
+      ]);
+      const token_list = tokenList.result.filter(
+        (token: any) =>
+          token.totalBalance !== "0" &&
+          !!token.decimals &&
+          !!token.name &&
+          !!token.symbol
+      );
+
+      tokens = await Promise.all(
+        (
+          await Promise.all(
+            token_list.map(async (token: any) => {
+              const metadata = await getTokenMetadata(
+                token.address,
+                chainId,
+                this.config.alchemyApiKey
+              );
+
+              return {
+                address: token.address,
+                decimals: parseInt(token.decimals),
+                name: token.name,
+                symbol: token.symbol,
+                balance: token.totalBalance,
+                chainId,
+                tokenUri: metadata.logo ?? undefined,
+                balanceUsdValueCents: "",
+                tokenExchangeUsdValueCents: "",
+              };
+            })
+          )
+        )
+          .filter((token: any) => {
+            console.log("token to filter", token);
+            return !!token.tokenUri;
+          })
+          .map(async (token: any) => {
+            console.log("token item ", token);
+            const quote = await getQuote({
+              fromToken: token,
+              hexChainId: chainId,
+              userAddress: address,
+              alchemyApiKey: this.config.alchemyApiKey,
+            });
+            console.log("quote", quote);
+            return token;
+          })
+      );
+    }
+
+    return tokens;
   }
 
   /**

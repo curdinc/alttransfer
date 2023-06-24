@@ -17,7 +17,7 @@ export function useUserCurrencies() {
       // if (!chain?.id || !address) return;
 
       const currencies = await sdk.getUsableCurrencies({
-        chainId: SupportedChainIdsSchema.parse(chain?.id ?? "0x89"),
+        chainId: SupportedChainIdsSchema.parse(chain?.id ?? "0x1"),
         address: "0xb3E9C57fB983491416a0C77b07629C0991c3FD59",
       });
       return { currencies };
