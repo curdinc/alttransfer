@@ -1,3 +1,4 @@
+import { LiFi } from "@lifi/sdk";
 import type { WalletClient } from "viem";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";
@@ -26,7 +27,7 @@ export class AltTransferCrossChainSdk {
   private getItemPrice: AltTransferCrossChainSdkConstructorArgs["getItemPrice"];
   private getRecipientAddress: AltTransferCrossChainSdkConstructorArgs["getRecipientAddress"];
   private config: AltTransferCrossChainSdkConstructorArgs["config"];
-
+  private lifi: LiFi;
   /**
    * @example
    * const sdk = AltTransferCrossChainPaymentSdk({
@@ -54,6 +55,9 @@ export class AltTransferCrossChainSdk {
    * @param {AltTransferCrossChainSdkConstructorArgs["config"]} args.config - Miscellaneous configuration options.
    */
   constructor(args: AltTransferCrossChainSdkConstructorArgs) {
+    this.lifi = new LiFi({
+      integrator: "",
+    });
     this.config = args.config;
     this.getItemPrice = args.getItemPrice;
     this.getRecipientAddress = args.getRecipientAddress;
@@ -76,8 +80,6 @@ export class AltTransferCrossChainSdk {
     chainId: SupportedChainIds;
     address: string;
   }) {
-    await Promise.resolve();
-    console.log("chainId, address", chainId, address);
     // todo: call Quicknode or alchemy api to get user token list
     // todo: contrast this list with those that has liquidity on the right liquidity pool base on the current chain
     throw new Error("Not implemented");

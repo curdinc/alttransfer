@@ -29,5 +29,13 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@lifi/sdk": "^2.0.1",
+    "@uniswap/sdk-core": "^3.2.6",
+    "@uniswap/smart-order-router": "3.13.2-hotfix2",
+    "@uniswap/v3-sdk": "^3.9.0",
+    "ethers": "^5.7.2",
+    "zod": "^3.21.4"
   }
 }
