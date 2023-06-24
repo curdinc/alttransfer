@@ -16,7 +16,7 @@ export default function SelectChain({
   setCurrentChain: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
-    <Dialog.Content className="DialogContent">
+    <>
       <div className="DialogHeading">
         <button
           className="IconButton"
@@ -50,6 +50,6 @@ export default function SelectChain({
           {chainsData[item as chainsDataType]}
         </button>
       ))}
-    </Dialog.Content>
+    </>
   );
 }

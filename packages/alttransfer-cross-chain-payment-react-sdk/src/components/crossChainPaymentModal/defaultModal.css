@@ -37,7 +37,7 @@
   --background: #2b2e3c;
   --background-secondary: rgba(22, 24, 36, 0.6);
 
-  --border-emphasis: rgb(104, 112, 118);
+  --border-emphasis: rgba(104, 112, 118, 0.5);
 
   --black-a7: hsla(0, 0%, 0%, 0.141);
   --black-a8: hsla(0, 0%, 0%, 0.22);
@@ -50,8 +50,9 @@ input {
   all: unset;
 }
 
-p {
+p, div {
   color: var(--secondary-text);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .DialogOverlay {
@@ -76,10 +77,11 @@ p {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90vw;
+  width: 70vw;
   max-width: 400px;
   max-height: 85vh;
-  padding: 25px;
+  min-height: 340px;
+  padding: 2em 1.75em 2em;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .DialogContent:focus {
@@ -100,9 +102,9 @@ p {
 
 .DialogTitle {
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--primary-text);
-  font-size: 1.75em;
+  font-size: 1.5em;
 }
 
 .DialogDescription {
@@ -118,10 +120,12 @@ p {
   border-radius: 10em;
   width: 60%;
   padding: 0.25em 1em;
-  font-size: 1.25em;
+  font-weight: 600;
+  font-size: 1.2em;
+  font-family: Arial, Helvetica, sans-serif;
   line-height: 1;
-  font-weight: 500;
   height: 35px;
+  margin-top: 1em;
   transition: background-color 0.3s ease-in-out;
   background: var(--primary-shadow);
   background: linear-gradient(
@@ -191,10 +195,10 @@ p {
 }
 
 /* HOMEPAGE */
-.HomepageCostSelectorContainer {
+.SectionContainer {
   display: flex;
   flex-direction: column;
-  border-radius: 0.75em;
+  border-radius: 1em;
   padding: 1em 1em;
   gap: 1em;
   box-shadow: 0 0 0 1px var(--border-emphasis);
@@ -204,7 +208,7 @@ p {
 
 .HomepageSelectButton {
   padding: 0.25em 1em;
-  border-radius: 1.2em;
+  border-radius: 1.5em;
   display: flex;
   align-items: center;
   gap: 0.75em;
@@ -235,6 +239,12 @@ p {
   background-color: var(--secondary-hover);
 }
 
+.splitText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
@@ -252,5 +262,43 @@ p {
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+
+/* SPINNER */
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: var(--primary) transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

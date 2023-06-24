@@ -1,16 +1,13 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  Cross2Icon,
-} from "@radix-ui/react-icons";
+import { ChevronRight, ChevronLeft, XIcon } from "lucide-react";
 
+const size = "1.5em";
 export const CrossIconButton = () => {
-  return <Cross2Icon width="1.25em" height="1.25em" />;
+  return <XIcon width={size} height={size} />;
 };
 
 export const RightIconButton = () => {
-  return <ChevronRightIcon width="1.25em" height="1.25em" />;
+  return <ChevronRight width={size} height={size} />;
 };
 export const LeftIconButton = () => {
-  return <ChevronLeftIcon width="1.25em" height="1.25em" />;
+  return <ChevronLeft width={size} height={size} />;
 };

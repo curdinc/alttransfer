@@ -9,6 +9,8 @@ import ModifyWallet from "./crossChainPaymentModal/modifyWallet";
 import SelectChain from "./crossChainPaymentModal/selectChain";
 import * as Dialog from "@radix-ui/react-dialog";
 import "./crossChainPaymentModal/defaultModal.css"
+import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
+import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
 
 const queryClient = new QueryClient();
 
@@ -18,8 +20,17 @@ export enum pages {
   SelectChain = "selectChain",
   ModifyWallet = "modifyWallet",
   ConfirmPayment = "confirmPayment",
-  PaymentSubmit = "paymentSubmit",
+  SubmittedPayment = "paymentSubmit",
 }
+
+export type constInfoType = {
+  curToken: string,
+    curCostInToken: string,
+    curCostInUSDC : string,
+    rate: string,
+    bal: string,
+    cost: string,
+} | Record<string, never>
 export type AltTransferCrossChainPaymentModalProps = {
   children: React.ReactNode;
 } & AltTransferCrossChainSdkConstructorArgs;
@@ -50,26 +61,41 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     useDestinationInfo();
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
   const [curChain, setCurChain] = React.useState("Fantom");
+  const [costInfo, setCostInfo] = React.useState({})
 
-  
+  React.useEffect(() => {
+    // Replace this
+    const randomCostInfo = {
+      curToken: "BTC",
+      curCostInToken: "0.353",
+      curCostInUSDC : "6339.2",
+      rate: "-0.5%",
+      bal: "0",
+      cost: "123",
+    }
+    setCostInfo(randomCostInfo)
+  }, [])
+
   const renderPage = () => {
     switch (currentScreen) {
       case pages.HomeScreen:
         return (
-          <HomePage setCurrentScreen={setCurrentScreen} curChain={curChain} />
+          <HomePage setCurrentScreen={setCurrentScreen} curChain={curChain} costInfo={costInfo} />
         );
       case pages.SelectToken:
         return <SelectToken setCurrentScreen={setCurrentScreen} />;
       case pages.ModifyWallet:
         return <ModifyWallet setCurrentScreen={setCurrentScreen} />;
       case pages.SelectChain:
-        return (
-          <SelectChain
+        return  <SelectChain
             setCurrentScreen={setCurrentScreen}
             currentChain={curChain}
             setCurrentChain={setCurChain}
           />
-        );
+      case pages.ConfirmPayment:
+        return <ConfirmPayment setCurrentScreen={setCurrentScreen} currentChain={curChain} costInfo={costInfo}/>
+      case pages.SubmittedPayment:
+        return <SubmittedPayment setCurrentScreen={setCurrentScreen} />;
       default:
         <div></div>;
     }
@@ -89,7 +115,10 @@ return (
   <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
   <Dialog.Portal>
     <Dialog.Overlay className="DialogOverlay" />
-    {renderPage()}
+
+    <Dialog.Content className="DialogContent">
+     {renderPage()}
+    </Dialog.Content>
   </Dialog.Portal>
 </Dialog.Root>);
 }

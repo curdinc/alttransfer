@@ -1,10 +1,10 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CircleIcon } from "@radix-ui/react-icons";
 import { Coinbase, MetaMask, WalletConnect } from "../../assets/icons-wallets";
 import { CrossIconButton, LeftIconButton } from "./iconButtons";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
+import { Circle } from "lucide-react";
 
 const randomShit = [
   { title: "Metamask", icon: <MetaMask /> },
@@ -15,7 +15,7 @@ const randomShit = [
   },
   {
     title: "Other wallets",
-    icon: <CircleIcon width={32} height={32} />,
+    icon: <Circle width={32} height={32} />,
   },
 ];
 
@@ -25,7 +25,7 @@ export default function ModifyWallet({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   return (
-    <Dialog.Content className="DialogContent">
+    <>
       <div className="DialogHeading">
         <button
           className="IconButton"
@@ -53,6 +53,6 @@ export default function ModifyWallet({
           </button>
         );
       })}
-    </Dialog.Content>
+    </>
   );
 }

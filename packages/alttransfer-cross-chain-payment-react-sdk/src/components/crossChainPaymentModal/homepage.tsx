@@ -3,29 +3,27 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { CrossIconButton, RightIconButton } from "./iconButtons";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
+import type { constInfoType} from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
 
-// replace
-const curToken = "something";
-const curCostInToken = "0.353";
-const curCostInUSDC = "6339.2";
-const rate = "-0.5%";
-const bal = "0";
 export default function HomePage({
   setCurrentScreen,
   curChain,
+  costInfo
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
   curChain: string;
+  costInfo: constInfoType;
 }) {
+  // REPLACE THIS
   const [isConnected, setIsConnected] = useState(true);
 
   return (
-    <Dialog.Content className="DialogContent">
+    <>
       {/* FIRST ROW -> TITLE + CLOSE BUTTON */}
       <div className="DialogHeading">
-        <div></div>
+        <div className="IconButton" style={{opacity: 0}}/>
         <Dialog.Title className="DialogTitle">Skylar Pays</Dialog.Title>
         <Dialog.Close asChild>
           <button className="IconButton" aria-label="Close">
@@ -36,13 +34,9 @@ export default function HomePage({
 
       {/* SECOND SECTION -> token / chain / cost */}
       {/* check IF WALLET IS CONNECTED */}
-      <div className={`HomepageCostSelectorContainer`}>
+      <div className={`SectionContainer`}>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
+          className="splitText"
         >
           <button
             className="HomepageSelectButton"
@@ -82,26 +76,36 @@ export default function HomePage({
             }}
           >
             <div style={{ color: "var(--primary-text)", fontSize: "1.75em" }}>
-              {curCostInToken}
+              {costInfo.curCostInToken}
             </div>
             <div style={{ color: "var(--tertiary-text)" }}>
-              ≈${curCostInUSDC + " (" + rate + ")"}
+              ≈${costInfo.curCostInUSDC + " (" + costInfo.rate + ")"}
             </div>
           </div>
-          <div style={{ color: "var(--tertiary-text)" }}>Balance: {bal}</div>
+          <div style={{ color: "var(--tertiary-text)" }}>Balance: {costInfo.bal}</div>
         </div>
       </div>
 
-      <div style={{ display: "flex", marginTop: 25, justifyContent: "center" }}>
+      <div className="SectionContainer">
+          <div className="splitText">
+            Cost
+            <div>${costInfo.cost+" "+"USD"}</div>
+          </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <button
           className="Button sky"
           onClick={() => {
-            setCurrentScreen(pages.ModifyWallet);
+            if (!isConnected) setCurrentScreen(pages.ModifyWallet);
+            else setCurrentScreen(pages.ConfirmPayment);
           }}
         >
-          Connect Wallet
+          {
+            isConnected ? "Pay" : "Connect Wallet"
+          }
         </button>
       </div>
-    </Dialog.Content>
+    </>
   );
 }

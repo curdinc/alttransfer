@@ -4,7 +4,7 @@ import { CrossIconButton, LeftIconButton } from "./iconButtons";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
 
-export default function SelectToken({
+export default function SubmittedPayment({
   setCurrentScreen,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
@@ -12,27 +12,18 @@ export default function SelectToken({
   return (
     <>
       <div className="DialogHeading">
-        <button
-          className="IconButton"
-          aria-label="Back"
-          onClick={() => { setCurrentScreen(pages.HomeScreen); }}
-        >
-          <LeftIconButton />
-        </button>
-        <Dialog.Title className="DialogTitle">Select token</Dialog.Title>
-        <Dialog.Close asChild>
+        <button className="IconButton" style={{opacity: 0}} />
+        <Dialog.Title className="DialogTitle">Payment submitted</Dialog.Title>
+        <Dialog.Close asChild onClick={() => {setCurrentScreen(pages.HomeScreen)}}>
           <button className="IconButton" aria-label="Close">
             <CrossIconButton />
           </button>
         </Dialog.Close>
       </div>
-      <fieldset className="Fieldset">
-        <input
-          className="Input"
-          id="name"
-          placeholder="Search name or paste address"
-        />
-      </fieldset>
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap: '1em' }}>
+        Payment submitted successfully
+        <div>View receipt</div>
+      </div>
     </>
   );
 }
