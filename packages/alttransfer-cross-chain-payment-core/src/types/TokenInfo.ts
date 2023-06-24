@@ -1,4 +1,4 @@
-import { SupportedChainIds } from "./SupportedChainIds";
+import type { SupportedChainIds } from "./SupportedChainIds";
 
 export type TokenInfo = {
   address: string;
