@@ -1,14 +1,23 @@
-import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CrossIconButton, LeftIconButton } from "./iconButtons";
+import React from "react";
+import { useUserCurrencies } from "../../hooks/useUserToken";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
+import { CrossIconButton, LeftIconButton } from "./iconButtons";
 
 export default function SelectToken({
   setCurrentScreen,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
+  const { currencies, currenciesError, isLoadingCurrencies } =
+    useUserCurrencies();
+  console.log(currencies);
+  if (isLoadingCurrencies) return <div>Loading...</div>;
+  if (currenciesError) {
+    console.error(currenciesError);
+    return <div>Error loading user currencies</div>;
+  }
   return (
     <>
       <div className="DialogHeading">

@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import type { WalletClient } from "viem";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";
@@ -17,8 +18,9 @@ export type AltTransferCrossChainSdkConstructorArgs = {
       }
   >;
   getRecipientAddress(this: void): Promise<{ address: string }>;
+
   config: {
-    quickNodeApiKey: string;
+    ChainAPIs: Record<SupportedChainIds, string>;
   };
 };
 
@@ -26,7 +28,6 @@ export class AltTransferCrossChainSdk {
   private getItemPrice: AltTransferCrossChainSdkConstructorArgs["getItemPrice"];
   private getRecipientAddress: AltTransferCrossChainSdkConstructorArgs["getRecipientAddress"];
   private config: AltTransferCrossChainSdkConstructorArgs["config"];
-
   /**
    * @example
    * const sdk = AltTransferCrossChainPaymentSdk({
@@ -45,7 +46,7 @@ export class AltTransferCrossChainSdk {
    *   }
    *   config={{
    *     // Needed to display an accurate Token balance available for the users to choose.
-   *     QuickNodeApiKey: "",
+   *     ChainAPIs: "",
    *   }}
    * })
    *
@@ -76,11 +77,27 @@ export class AltTransferCrossChainSdk {
     chainId: SupportedChainIds;
     address: string;
   }) {
-    await Promise.resolve();
-    console.log("chainId, address", chainId, address);
     // todo: call Quicknode or alchemy api to get user token list
+    const provider = new ethers.providers.JsonRpcProvider(
+      this.config.ChainAPIs[chainId]
+    );
+    const tokens = await provider.send("qn_getWalletTokenBalance", [
+      { wallet: address },
+    ]);
+    const token_list = tokens.result;
+    const usable_tokens: Array<TokenInfo> = token_list.map((token: any) => ({
+      address: token.address,
+      decimals: token.decimals,
+      name: token.name,
+      symbol: token.symbol,
+      balance: token.totalBalance,
+      chainId: chainId,
+      tokenUri: "",
+      balanceUsdValueCents: "",
+      tokenExchangeUsdValueCents: "",
+    }));
     // todo: contrast this list with those that has liquidity on the right liquidity pool base on the current chain
-    throw new Error("Not implemented");
+    return usable_tokens;
   }
 
   /**
