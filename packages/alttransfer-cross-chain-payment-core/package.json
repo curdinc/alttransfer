@@ -1,18 +1,24 @@
 {
   "name": "@alttransfer/cross-chain-payment-core",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsup src/index.ts --env.ESM_ONLY true",
     "build-packages": "pnpm build",
-    "dev": "tsup src/index.ts --watch",
+    "dev": "tsup src/index.ts --env.ESM_ONLY true --watch",
     "lint": "eslint \"src/**/*.ts*\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
