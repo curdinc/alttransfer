@@ -5,6 +5,6 @@
   "fixed": [],
   "linked": [],
   "access": "public",
-  "updateInternalDependencies": "patch",
-  "ignore": ["@alttransfer/docs"]
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch"
 }
