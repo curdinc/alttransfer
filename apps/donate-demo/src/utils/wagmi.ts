@@ -8,13 +8,22 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
+if (
+  !process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ||
+  !process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+) {
+  throw new Error(
+    "Missing NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID or NEXT_PUBLIC_ALCHEMY_API_KEY"
+  );
+}
+
 const walletConnectProjectId =
-  process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID!;
+  process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, ...(process.env.NODE_ENV === "development" ? [goerli] : [])],
   [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY! }),
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
     publicProvider(),
   ]
 );

@@ -1,11 +1,20 @@
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["next", "turbo", "prettier"],
+  extends: [
+    "turbo",
+    "prettier",
+    "next",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  ],
   rules: {
     "@next/next/no-html-link-for-pages": "off",
   },
-  parserOptions: {
-    babelOptions: {
-      presets: [require.resolve("next/babel")],
+  parser: "@typescript-eslint/parser",
+  settings: {
+    next: {
+      rootDir: ["apps/*/"],
     },
   },
 };

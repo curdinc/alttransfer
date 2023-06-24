@@ -1,4 +1,5 @@
 {
+  "name": "alttransfer",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -11,7 +12,7 @@
     "ci:publish": "turbo run build-packages --filter=docs^... && changeset publish",
     "ci:version": "changeset version"
   },
-  "devDependencies": {
+  "dependencies": {
     "@changesets/cli": "^2.25.2",
     "@manypkg/cli": "^0.21.0",
     "eslint": "^8.29.0",

@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useBlockNumber } from 'wagmi'
+import { useBlockNumber } from "wagmi";
 
 export function BlockNumber() {
-  const { data } = useBlockNumber({ watch: true })
-  return <div>{data?.toString()}</div>
+  const { data } = useBlockNumber({ watch: true });
+  return <div>{data?.toString()}</div>;
 }

@@ -2,8 +2,12 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": ["dist/**", "storybook-static/**"],
+      "outputs": ["dist/**"],
       "dependsOn": ["^build"]
+    },
+    "build-packages": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["^build-packages"]
     },
     "test": {
       "outputs": ["coverage/**"],
@@ -17,5 +21,10 @@
     "clean": {
       "cache": false
     }
-  }
+  },
+  "globalEnv": [
+    "NODE_ENV",
+    "NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID",
+    "NEXT_PUBLIC_ALCHEMY_API_KEY"
+  ]
 }

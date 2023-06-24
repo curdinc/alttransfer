@@ -1,25 +1,25 @@
-'use client'
+"use client";
 
-import { paginatedIndexesConfig, useContractInfiniteReads } from 'wagmi'
+import { paginatedIndexesConfig, useContractInfiniteReads } from "wagmi";
 
-import { wagmiContractConfig } from './contracts'
-import { stringify } from '../utils/stringify'
+import { stringify } from "../utils/stringify";
+import { wagmiContractConfig } from "./contracts";
 
 export function ReadContractsInfinite() {
   const { data, isLoading, isSuccess, fetchNextPage } =
     useContractInfiniteReads({
-      cacheKey: 'lootTokenURIs',
+      cacheKey: "lootTokenURIs",
       ...paginatedIndexesConfig(
         (index: number) => [
           {
             ...wagmiContractConfig,
-            functionName: 'ownerOf',
+            functionName: "ownerOf",
             args: [BigInt(index)] as const,
           },
         ],
-        { start: 0, perPage: 10, direction: 'increment' },
+        { start: 0, perPage: 10, direction: "increment" }
       ),
-    })
+    });
 
   return (
     <div>
@@ -33,9 +33,17 @@ export function ReadContractsInfinite() {
               ))}
             </div>
           ))}
-          <button onClick={() => fetchNextPage()}>Fetch more</button>
+          <button
+            onClick={() => {
+              fetchNextPage().catch((err) => {
+                console.error(err);
+              });
+            }}
+          >
+            Fetch more
+          </button>
         </>
       )}
     </div>
-  )
+  );
 }

@@ -1,45 +1,47 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { recoverMessageAddress } from 'viem'
-import { type Address, useSignMessage } from 'wagmi'
+import { useEffect, useState } from "react";
+import { recoverMessageAddress } from "viem";
+import { useSignMessage, type Address } from "wagmi";
 
 export function SignMessage() {
-  const [recoveredAddress, setRecoveredAddress] = useState<Address>()
+  const [recoveredAddress, setRecoveredAddress] = useState<Address>();
   const {
     data: signature,
     variables,
     error,
     isLoading,
     signMessage,
-  } = useSignMessage()
+  } = useSignMessage();
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       if (variables?.message && signature) {
         const recoveredAddress = await recoverMessageAddress({
           message: variables?.message,
           signature,
-        })
-        setRecoveredAddress(recoveredAddress)
+        });
+        setRecoveredAddress(recoveredAddress);
       }
-    })()
-  }, [signature, variables?.message])
+    })().catch((err) => {
+      console.error(err);
+    });
+  }, [signature, variables?.message]);
 
   return (
     <>
       <form
         onSubmit={(event) => {
-          event.preventDefault()
-          const element = event.target as HTMLFormElement
-          const formData = new FormData(element)
-          const message = formData.get('message') as string
-          signMessage({ message })
+          event.preventDefault();
+          const element = event.target as HTMLFormElement;
+          const formData = new FormData(element);
+          const message = formData.get("message") as string;
+          signMessage({ message });
         }}
       >
         <input name="message" type="text" required />
         <button disabled={isLoading} type="submit">
-          {isLoading ? 'Check Wallet' : 'Sign Message'}
+          {isLoading ? "Check Wallet" : "Sign Message"}
         </button>
       </form>
 
@@ -51,5 +53,5 @@ export function SignMessage() {
       )}
       {error && <div>Error: {error?.message}</div>}
     </>
-  )
+  );
 }

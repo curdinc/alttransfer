@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { type Address, useToken } from 'wagmi'
+import { useToken, type Address } from 'wagmi'
 
 export function Token() {
   const [address, setAddress] = useState<Address>(
@@ -17,7 +17,9 @@ export function Token() {
           placeholder="token address"
           value={address}
         />
-        <button onClick={() => refetch()}>fetch</button>
+        <button onClick={() => {refetch().catch((err) => {
+            console.error(err);
+          });}}>fetch</button>
       </div>
 
       {data && (
