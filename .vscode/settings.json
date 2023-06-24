@@ -1,6 +1,7 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": true,
+    "source.fixAll": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
@@ -9,7 +10,12 @@
     { "pattern": "apps/*/" },
     { "pattern": "packages/*/" }
   ],
+  "eslint.validate": ["javascript, typescript"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "tailwindCSS.experimental.configFile": "./packages/config/tailwind/index.ts",
+  "prettier.prettierPath": "./node_modules/prettier",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }

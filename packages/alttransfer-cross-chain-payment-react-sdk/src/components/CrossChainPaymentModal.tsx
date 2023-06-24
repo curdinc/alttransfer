@@ -8,14 +8,10 @@ import "./crossChainPaymentModal/defaultModal.css";
 import HomePage from "./crossChainPaymentModal/homepage";
 import ModifyWallet from "./crossChainPaymentModal/modifyWallet";
 import SelectChain from "./crossChainPaymentModal/selectChain";
-<<<<<<< HEAD
-import * as Dialog from "@radix-ui/react-dialog";
 import "./crossChainPaymentModal/defaultModal.css"
 import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
 import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
-=======
 import SelectToken from "./crossChainPaymentModal/selectToken";
->>>>>>> 1ef3ae2adc9cf8b18e6c935e363f0688a535a91d
 
 const queryClient = new QueryClient();
 
@@ -114,13 +110,15 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     return <div>Something went wrong fetching payment information</div>;
   }
 
-  return (
-    <Dialog.Root>
-      <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="DialogOverlay" />
-        {renderPage()}
-      </Dialog.Portal>
-    </Dialog.Root>
-  );
-};
+return (
+<Dialog.Root>
+  <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
+  <Dialog.Portal>
+    <Dialog.Overlay className="DialogOverlay" />
+
+    <Dialog.Content className="DialogContent">
+     {renderPage()}
+    </Dialog.Content>
+  </Dialog.Portal>
+</Dialog.Root>);
+}
