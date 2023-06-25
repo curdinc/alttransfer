@@ -82,20 +82,20 @@ type SupportedChainIds = '0x89' | '0xa' | '0xa4b1' | '0xa86a' | '0x1'
 <AltTransferCrossChainPayment
     async getItemPrice(): Promise<{
             isNative: true,
-            price: string,
+            amount: string,
             chainId: SupportedChainIds
         } | {
             isNative: false,
             tokenAddress: string,
-            price: string
+            amount: string
             chainId: SupportedChainIds
         }>{
         // you can fetch the price from your backend if needed here.
         return  {
             isNative: false,
             tokenAddress: '0x123456789...',
-            // price is in the currency's base units
-            price: '12000000000'
+            // amount is in the currency's base units
+            amount: '12000000000'
         }
     }
     async getRecipientAddress(): Promise<{address: string}> {
@@ -104,7 +104,11 @@ type SupportedChainIds = '0x89' | '0xa' | '0xa4b1' | '0xa86a' | '0x1'
     }
     optimisticSettlement={false}
     config={{
-      QuickNodeApiKey: "",
+      ChainAPIs: {
+        "0x1": "",
+        "0x89": "",
+      },
+      alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "",
     }}
 />
 ```
@@ -200,30 +204,36 @@ Now, you can simply use the payment component anywhere in your app where you wan
 const sdk = AltTransferCrossChainPaymentSdk({
   async getItemPrice(): Promise<{
           isNative: true,
-          price: string,
+          amount: string,
           chainId: SupportedChainIds
       } | {
           isNative: false,
           tokenAddress: string,
-          price: string
+          amount: string
           chainId: SupportedChainIds
       }>{
       // you can fetch the price from your backend if needed here.
       return  {
           isNative: false,
           tokenAddress: '0x123456789...',
-          // price is in the currency's base units
-          price: '12000000000'
+          // amount is in the currency's base units
+          amount: '12000000000'
       }
   }
   async getRecipientAddress(): Promise<{address: string}> {
       // you can fetch the address you want the token or coin to be sent too.
       return '0x123456789...'
   }
-  config={{
-    // Needed to display an accurate Token balance available for the users to choose.
-    QuickNodeApiKey: "",
-  }}
+
+  optimisticSettlement={false}
+    config={{
+      // Needed to display an accurate Token balance available for the users to choose.
+      ChainAPIs: {
+        "0x1": "",
+        "0x89": "",
+      },
+      alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "",
+    }}
 })
 
 // this will return a list of tokens that the user can use to pay for the transaction.
