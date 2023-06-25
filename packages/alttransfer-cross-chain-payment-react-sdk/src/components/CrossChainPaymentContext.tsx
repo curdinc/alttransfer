@@ -52,7 +52,7 @@ const CrossChainContext = createContext<{
   }),
   currency: defaultCurrency,
   setCurrency: () => {},
-  currentChain: "Chain",
+  currentChain: "Ethereum",
   setCurrentChain: () => {},
 });
 export function CrossChainPaymentProvider({

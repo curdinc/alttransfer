@@ -1,5 +1,5 @@
-import React from "react";
-import { useAccount } from "wagmi";
+import React, { useEffect } from "react";
+import { useAccount, useNetwork } from "wagmi";
 import { RightIconButton } from "../../assets/iconButtons";
 import { useDestinationInfo } from "../../hooks/useDestinationInfo";
 import { getCurrencyToBePaid } from "../../units/blockchain";
@@ -7,7 +7,7 @@ import { formatCurrency } from "../../units/formatCurrency";
 import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
-import { chainsData } from "./chains-data";
+import { chainsData, chainsID } from "./chains-data";
 
 export default function HomePage({
   setCurrentScreen,
@@ -15,15 +15,24 @@ export default function HomePage({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { isConnected } = useAccount();
-  const { currentChain, currency, sdk } = useCrossChainPayment();
-
+  const { chain } = useNetwork();
+  const { currentChain, setCurrentChain, currency, sdk } = useCrossChainPayment();
+  
   const onClick = () => {
     if (!isConnected) setCurrentScreen(pages.ModifyWallet);
-    if (!currency.address) setCurrentScreen(pages.SelectToken);
+    else if (!currency.address) setCurrentScreen(pages.SelectToken);
     else {
       setCurrentScreen(pages.ConfirmPayment);
     }
   };
+
+  useEffect(() => {
+    if (isConnected && chainsID.has(chain?.name??"")) {
+      setCurrentChain(chain?.name??"Chain")
+    }else {
+      setCurrentChain("Chain")
+    }
+  }, [isConnected])
 
   const { isLoadingDestinationInfo, destinationInfo, destinationError } =
     useDestinationInfo();
