@@ -24,13 +24,11 @@ export async function getQuote({
   fromToken,
   toToken,
   hexChainId,
-  userAddress,
   alchemyApiKey,
 }: {
   fromToken: TokenInfo;
   toToken?: TokenInfo;
   hexChainId: SupportedChainIds;
-  userAddress: string;
   alchemyApiKey: string;
 }) {
   toToken = toToken ?? {
@@ -40,6 +38,7 @@ export async function getQuote({
     symbol: "USDC",
     chainId: hexChainId,
     balance: "",
+    formattedBalance: "",
     balanceUsdValueCents: "",
     tokenExchangeUsdValueCents: "100",
   };
@@ -56,7 +55,7 @@ export async function getQuote({
     provider
   );
 
-  const result: string[] = [];
+  const result: { formattedUsdcValue: string; feeAmount: number }[] = [];
   const feeMapping: Record<string, FeeAmount> = {
     "0": FeeAmount.LOWEST,
     "1": FeeAmount.LOW,
@@ -125,10 +124,12 @@ export async function getQuote({
         pool.token0.symbol
       }`
     );
-    result.push(pool.token1Price.toSignificant());
+    result.push({
+      formattedUsdcValue: pool.token1Price.toSignificant(),
+      feeAmount: feeMapping[i.toString()],
+    });
   }
-  console.log("result", result);
-  return { formattedUsdcValue: result.at(-1) };
+  return result.at(-1);
 }
 
 async function getPoolImmutables(poolContract: ethers.Contract) {
