@@ -8,10 +8,10 @@ import "./crossChainPaymentModal/defaultModal.css";
 import HomePage from "./crossChainPaymentModal/homepage";
 import ModifyWallet from "./crossChainPaymentModal/modifyWallet";
 import SelectChain from "./crossChainPaymentModal/selectChain";
-import "./crossChainPaymentModal/defaultModal.css"
 import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
 import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
 import SelectToken from "./crossChainPaymentModal/selectToken";
+import Profile from "./crossChainPaymentModal/profile";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +22,7 @@ export enum pages {
   ModifyWallet = "modifyWallet",
   ConfirmPayment = "confirmPayment",
   SubmittedPayment = "paymentSubmit",
+  Profile = "profile"
 }
 
 export type constInfoType = {
@@ -32,6 +33,7 @@ export type constInfoType = {
   bal: string,
   cost: string,
 } | Record<string, never>
+
 export type AltTransferCrossChainPaymentModalProps = {
   children: React.ReactNode;
 } & AltTransferCrossChainSdkConstructorArgs;
@@ -63,6 +65,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
   const [curChain, setCurChain] = React.useState("Chain");
   const [costInfo, setCostInfo] = React.useState({})
+  const [brandName, setBrandName] = React.useState("Your brand name");
 
   React.useEffect(() => {
     // Replace this
@@ -81,7 +84,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     switch (currentScreen) {
       case pages.HomeScreen:
         return (
-          <HomePage setCurrentScreen={setCurrentScreen} curChain={curChain} costInfo={costInfo} />
+          <HomePage setCurrentScreen={setCurrentScreen} curChain={curChain} costInfo={costInfo} brandName={brandName} />
         );
       case pages.SelectToken:
         return <SelectToken setCurrentScreen={setCurrentScreen} />;
@@ -97,6 +100,8 @@ const PaymentModal: React.FC<modalProps> = (props) => {
         return <ConfirmPayment setCurrentScreen={setCurrentScreen} currentChain={curChain} costInfo={costInfo} />
       case pages.SubmittedPayment:
         return <SubmittedPayment setCurrentScreen={setCurrentScreen} />;
+      case pages.Profile:
+        return <Profile setCurrentScreen={setCurrentScreen} />
       default:
         <div></div>;
     }
@@ -111,7 +116,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   }
 
   return (
-    <Dialog.Root>
+    <Dialog.Root onOpenChange={() => { setCurrentScreen(pages.HomeScreen) }}>
       <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />

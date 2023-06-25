@@ -4,10 +4,11 @@ import { useConnect } from "wagmi";
 import { Coinbase, MetaMask, WalletConnect } from "../../assets/icons-wallets";
 import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
-import "./defaultmodal.css";
+import "./defaultModal.css";
+import NavBar from "../navBar";
 
 
-let randomShit = new Map<string, JSX.Element>([
+export const wallets = new Map<string, JSX.Element>([
   ["MetaMask", <MetaMask />],
   ["Coinbase Wallet", <Coinbase />],
   ["WalletConnect", <WalletConnect />],
@@ -24,25 +25,7 @@ export default function ModifyWallet({
     useConnect()
   return (
     <>
-      <div className="DialogHeading">
-        <button
-          className="IconButton"
-          aria-label="Back"
-          onClick={() => {
-            setCurrentScreen(pages.HomeScreen);
-          }}
-        >
-          <LeftIconButton />
-        </button>
-        <Dialog.Title className="DialogTitle">
-          Select a wallet
-        </Dialog.Title>
-        <Dialog.Close asChild>
-          <button className="IconButton" aria-label="Close">
-            <CrossIconButton />
-          </button>
-        </Dialog.Close>
-      </div>
+      <NavBar backLink={pages.HomeScreen} title="Select a wallet" setCurrentScreen={setCurrentScreen} />
       {connectors.map((connector) => (
         <button
           className="ModifyWalletButton"
@@ -61,12 +44,12 @@ export default function ModifyWallet({
               ' (connecting)'}
           </div>
           {
-            randomShit.has(connector.name) ? randomShit.get(connector.name) : <Circle width={32} height={32} />
+            wallets.has(connector.name) ? wallets.get(connector.name) : <Circle width={32} height={32} />
           }
         </button>
       ))}
 
-      {/* {randomShit.map((item) => {
+      {/* {wallets.map((item) => {
         return (
           <button className="ModifyWalletButton" key={item.title}>
             <div>{item.title}</div>

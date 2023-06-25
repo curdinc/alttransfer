@@ -1,4 +1,4 @@
-import { ChevronRight, ChevronLeft, XIcon } from "lucide-react";
+import { ChevronRight, ChevronLeft, XIcon, UserCircle, UserCircle2, ExternalLink, CopyPlusIcon, CopyIcon } from "lucide-react";
 
 const size = "1.5em";
 export const CrossIconButton = () => {
@@ -10,4 +10,8 @@ export const RightIconButton = () => {
 };
 export const LeftIconButton = () => {
   return <ChevronLeft width={size} height={size} strokeWidth={2.5} />;
+};
+
+export const ProfileEmptyIcon = () => {
+  return <UserCircle2 width={"1.75em"} height={"1.75em"} strokeWidth={2} />;
 };

@@ -30,6 +30,8 @@
   --primary-text: #dde1e6;
   --secondary-text: #d1d2d7;
   --tertiary-text: #a0a0a0;
+  --tertiary-link: rgba(50, 128, 237, 0.8);
+  --tertiary-link-active: rgba(50, 128, 237, 1);
 
   --background: #2b2e3c;
   --background-secondary: rgba(22, 24, 36, 0.6);
@@ -102,6 +104,12 @@ p, div {
   font-weight: 600;
   color: var(--primary-text);
   font-size: 1.5em;
+}
+
+.largeText {
+  /* font-weight: 600; */
+  color: var(--primary-text);
+  font-size: 1.75em;
 }
 
 .DialogDescription {
@@ -303,4 +311,22 @@ p, div {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* PROFILE LINKS */
+.ProfileLinks {
+  display: flex;
+  gap: 0.5em;
+  cursor: pointer;
+  color: var(--tertiary-text);
+}
+
+.ProfileLinks.gray:active {
+  color: var(--secondary-text);
+}
+.ProfileLinks.blue {
+  color: var(--tertiary-link);
+}
+.ProfileLinks.blue:active {
+  color: var(--tertiary-link-active);
 }

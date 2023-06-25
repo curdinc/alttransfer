@@ -4,7 +4,8 @@ import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
 import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
-import "./defaultmodal.css";
+import "./defaultModal.css";
+import NavBar from "../navBar";
 
 export default function SelectChain({
   setCurrentScreen,
@@ -17,23 +18,7 @@ export default function SelectChain({
 }) {
   return (
     <>
-      <div className="DialogHeading">
-        <button
-          className="IconButton"
-          aria-label="Back"
-          onClick={() => {
-            setCurrentScreen(pages.HomeScreen);
-          }}
-        >
-          <LeftIconButton />
-        </button>
-        <Dialog.Title className="DialogTitle">Select token</Dialog.Title>
-        <Dialog.Close asChild>
-          <button className="IconButton" aria-label="Close">
-            <CrossIconButton />
-          </button>
-        </Dialog.Close>
-      </div>
+      <NavBar backLink={pages.HomeScreen} title="Select chain" setCurrentScreen={setCurrentScreen} />
       {Object.keys(chainsData).map((item, i) => (
         <button
           className="ModifyWalletButton"
