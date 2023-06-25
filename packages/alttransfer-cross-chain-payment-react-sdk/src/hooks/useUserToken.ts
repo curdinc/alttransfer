@@ -20,7 +20,7 @@ export function useUserCurrencies() {
         chainId: SupportedChainIdsSchema.parse(
           `0x${chain?.id.toString(16)}` ?? "0x1"
         ),
-        address: "0xb3E9C57fB983491416a0C77b07629C0991c3FD59",
+        address,
       });
       return currencies;
     },
