@@ -87,7 +87,7 @@ export default function ConfirmPayment({
                 paddingTop: "1em",
               }}
             >
-              <div>Destination</div>
+              <div>Paying To</div>
               <div>{sdk.text.brandName}</div>
             </div>
           </div>

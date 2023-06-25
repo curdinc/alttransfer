@@ -30,6 +30,7 @@ export default function SelectChain({
       />
       {supportedChains.map((item) => (
         <button
+          key={item}
           className="ModifyWalletButton"
           style={{
             backgroundColor:

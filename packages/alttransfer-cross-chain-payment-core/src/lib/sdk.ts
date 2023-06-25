@@ -1,11 +1,18 @@
 import { LiFi } from "@lifi/sdk";
 import { ethers } from "ethers";
-import { formatUnits, WalletClient, zeroAddress } from "viem";
+import { formatUnits, Transport, WalletClient, zeroAddress } from "viem";
+import { Chain, mainnet } from "viem/chains";
 import {
   getTokenMetadata,
   getUserTokenBalance,
 } from "../services/alchemy/getUserTokenBalance";
-import { getToken, getTokens } from "../services/lifi/getQuote";
+import { walletClientToSigner } from "../services/ethers";
+import {
+  executeRoute,
+  getLiFiQuote,
+  getToken,
+  getTokens,
+} from "../services/lifi/getQuote";
 import { getQuote } from "../services/uniswap/getQuote";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";
@@ -282,22 +289,31 @@ export class AltTransferCrossChainSdk {
    */
   async pay({
     currency,
+    payingAmount,
     optimisticSettlement,
     walletClient,
   }: {
-    walletClient: WalletClient;
+    walletClient: WalletClient<Transport, Chain>;
+    payingAmount: string;
     currency: TokenInfo;
     optimisticSettlement: boolean;
   }) {
-    await Promise.resolve();
-    console.log(
-      "walletClient, currency, optimisticSettlement",
-      walletClient,
-      currency,
-      optimisticSettlement
-    );
-    // todo: Approve token
-    // todo: Call Hans contract to initiate payment
-    throw new Error("Not implemented");
+    await walletClient.addChain({
+      chain: mainnet,
+    });
+    const signer = walletClientToSigner(walletClient);
+
+    const toToken = await this.getItemPriceInfo();
+    const toAddress = await this.getDestinationAddress();
+    const quote = await getLiFiQuote({
+      fromToken: currency,
+      fromAmount: payingAmount,
+      userAddress: await signer.getAddress(),
+      targetAddress: toAddress,
+      toToken,
+      hexChainId: currency.chainId,
+    });
+    console.log("quote", quote);
+    await executeRoute(quote, signer);
   }
 }
