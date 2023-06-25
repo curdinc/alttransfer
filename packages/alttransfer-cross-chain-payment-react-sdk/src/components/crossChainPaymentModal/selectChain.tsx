@@ -16,7 +16,9 @@ export default function SelectChain({
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
     useSwitchNetwork();
   var intersectionChains = chains
-    .map((item, i) => (chainHex.has(item.id.toString(16)) ? item.name : null))
+    .map((item, i) => {
+      return chainHex.has(item.id.toString(16)) ? item.name : null;
+    })
     .filter((value) => value != null);
   var supportedChains = intersectionChains.map((item, i) => item ?? "");
   return (
