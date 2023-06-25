@@ -1,5 +1,12 @@
 import { configureChains, createConfig } from 'wagmi';
-import { dogechain, goerli, mainnet, optimism, polygon } from 'wagmi/chains';
+import {
+  arbitrum,
+  gnosis,
+  goerli,
+  mainnet,
+  optimism,
+  polygon
+} from 'wagmi/chains';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
@@ -22,9 +29,10 @@ const walletConnectProjectId =
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
+    arbitrum,
     optimism,
     polygon,
-    dogechain,
+    gnosis,
     ...(process.env.NODE_ENV === 'development' ? [goerli] : [])
   ],
   [
