@@ -78,12 +78,7 @@ export default function ConfirmPayment({
             marginBottom: "1em",
           }}
         >
-          <div className="lds-ring" style={{ margin: "1em 0em" }}>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+          <div className="checkmark-wrapper spinner" style={{margin:"1em"}}></div>
           <div>Confirm this transaction in your wallet</div>
           <div
             style={{ color: "var(--tertiary-text)", fontSize: "0.9em" }}

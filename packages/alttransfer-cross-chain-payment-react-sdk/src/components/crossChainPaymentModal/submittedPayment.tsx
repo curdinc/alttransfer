@@ -18,6 +18,9 @@ export default function SubmittedPayment({
           gap: "1em",
         }}
       >
+        <div className="checkmark-wrapper circle" style={{margin:"1em"}}>
+          <span className="checkmark"/>
+        </div>
         Payment submitted successfully
         <div>View receipt</div>
       </div>
