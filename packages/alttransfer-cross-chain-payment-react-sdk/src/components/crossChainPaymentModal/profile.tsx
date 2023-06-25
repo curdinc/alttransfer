@@ -40,7 +40,7 @@ export default function Profile({
       if (chainIdParsed.success) {
         setChainId(chainIdParsed.data);
         if (address != null) {
-          getSwaps(address, chainId).then((res) => {
+          getSwaps(address, chainIdParsed.data).then((res) => {
             setData(res);
           });
         }
