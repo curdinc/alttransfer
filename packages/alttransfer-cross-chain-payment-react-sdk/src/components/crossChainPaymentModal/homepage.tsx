@@ -86,7 +86,7 @@ export default function HomePage({
             </div> */}
           {/* </div> */}
           <div style={{ color: "var(--tertiary-text)" }}>
-            {isConnected ? `Balance: ${costInfo.bal}` : ""}
+            {isConnected ? `Balance: ${currency.formattedBalance}` : ""}
           </div>
         </div>
       </div>
