@@ -1,27 +1,23 @@
-import * as Dialog from "@radix-ui/react-dialog";
 import React from "react";
 import { useAccount } from "wagmi";
+import { RightIconButton } from "../../assets/iconButtons";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
+import NavBar from "../navBar";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
-import { CrossIconButton, RightIconButton } from "../../assets/iconButtons";
-import "./defaultModal.css";
-import NavBar from "../navBar";
-import { UserCircle } from "lucide-react";
 
 export default function HomePage({
   setCurrentScreen,
   curChain,
   costInfo,
-  brandName
+  brandName,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
   curChain: string;
   costInfo: constInfoType;
   brandName: string;
 }) {
-
   const { isConnected } = useAccount();
 
   return (
@@ -31,7 +27,7 @@ export default function HomePage({
 
       {/* SECOND SECTION -> token / chain / cost */}
       <div className={`SectionContainer`}>
-        <div className="splitText" >
+        <div className="splitText">
           <button
             className="HomepageSelectButton"
             onClick={() => {
@@ -70,14 +66,14 @@ export default function HomePage({
               gap: "0.5em",
             }}
           > */}
-          <div className="largeText">
-            {costInfo.curCostInToken}
-          </div>
+          <div className="largeText">{costInfo.curCostInToken}</div>
           {/* <div style={{ color: "var(--tertiary-text)" }}>
               ≈${costInfo.curCostInUSDC + " (" + costInfo.rate + ")"}
             </div> */}
           {/* </div> */}
-          <div style={{ color: "var(--tertiary-text)" }}>{isConnected ? `Balance: ${costInfo.bal}` : ""}</div>
+          <div style={{ color: "var(--tertiary-text)" }}>
+            {isConnected ? `Balance: ${costInfo.bal}` : ""}
+          </div>
         </div>
       </div>
 
@@ -96,9 +92,7 @@ export default function HomePage({
             else setCurrentScreen(pages.ConfirmPayment);
           }}
         >
-          {
-            isConnected ? "Pay" : "Connect Wallet"
-          }
+          {isConnected ? "Pay" : "Connect Wallet"}
         </button>
       </div>
     </>

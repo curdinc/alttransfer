@@ -1,12 +1,8 @@
-import * as Dialog from "@radix-ui/react-dialog";
 import { Circle } from "lucide-react";
 import { useConnect } from "wagmi";
 import { Coinbase, MetaMask, WalletConnect } from "../../assets/icons-wallets";
-import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
-import "./defaultModal.css";
 import NavBar from "../navBar";
-
 
 export const wallets = new Map<string, JSX.Element>([
   ["MetaMask", <MetaMask />],
@@ -14,18 +10,20 @@ export const wallets = new Map<string, JSX.Element>([
   ["WalletConnect", <WalletConnect />],
 ]);
 
-
-
 export default function ModifyWallet({
   setCurrentScreen,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect()
+    useConnect();
   return (
     <>
-      <NavBar backLink={pages.HomeScreen} title="Select a wallet" setCurrentScreen={setCurrentScreen} />
+      <NavBar
+        backLink={pages.HomeScreen}
+        title="Select a wallet"
+        setCurrentScreen={setCurrentScreen}
+      />
       {connectors.map((connector) => (
         <button
           className="ModifyWalletButton"
@@ -38,14 +36,16 @@ export default function ModifyWallet({
         >
           <div>
             {connector.name}
-            {!connector.ready && ' (unsupported)'}
+            {!connector.ready && " (unsupported)"}
             {isLoading &&
               connector.id === pendingConnector?.id &&
-              ' (connecting)'}
+              " (connecting)"}
           </div>
-          {
-            wallets.has(connector.name) ? wallets.get(connector.name) : <Circle width={32} height={32} />
-          }
+          {wallets.has(connector.name) ? (
+            wallets.get(connector.name)
+          ) : (
+            <Circle width={32} height={32} />
+          )}
         </button>
       ))}
 

@@ -1,14 +1,10 @@
-import * as Dialog from "@radix-ui/react-dialog";
+import { CopyIcon, ExternalLink } from "lucide-react";
 import React from "react";
-import { useUserCurrencies } from "../../hooks/useUserToken";
-import { pages } from "../CrossChainPaymentModal";
-import "./defaultModal.css";
-import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
-import NavBar from "../navBar";
 import { useAccount } from "wagmi";
-import { wallets } from "./modifyWallet";
 import { formatEvmAddress } from "../../units/blockchain";
-import { CopyIcon, ExternalLink, ExternalLinkIcon } from "lucide-react";
+import { pages } from "../CrossChainPaymentModal";
+import NavBar from "../navBar";
+import { wallets } from "./modifyWallet";
 
 export default function Profile({
   setCurrentScreen,

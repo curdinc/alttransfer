@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
+import React from "react";
 import { pages } from "../CrossChainPaymentModal";
-import "./defaultModal.css";
 import NavBar from "../navBar";
 
 export default function SubmittedPayment({
@@ -13,7 +10,14 @@ export default function SubmittedPayment({
   return (
     <>
       <NavBar title="Payment submitted" setCurrentScreen={setCurrentScreen} />
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1em' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "1em",
+        }}
+      >
         Payment submitted successfully
         <div>View receipt</div>
       </div>

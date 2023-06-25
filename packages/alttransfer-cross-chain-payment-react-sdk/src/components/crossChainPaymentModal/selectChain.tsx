@@ -1,11 +1,8 @@
 import React from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { pages } from "../CrossChainPaymentModal";
+import NavBar from "../navBar";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
-import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
-import { pages } from "../CrossChainPaymentModal";
-import "./defaultModal.css";
-import NavBar from "../navBar";
 
 export default function SelectChain({
   setCurrentScreen,
@@ -18,7 +15,11 @@ export default function SelectChain({
 }) {
   return (
     <>
-      <NavBar backLink={pages.HomeScreen} title="Select chain" setCurrentScreen={setCurrentScreen} />
+      <NavBar
+        backLink={pages.HomeScreen}
+        title="Select chain"
+        setCurrentScreen={setCurrentScreen}
+      />
       {Object.keys(chainsData).map((item, i) => (
         <button
           className="ModifyWalletButton"
