@@ -66,7 +66,7 @@ export async function executeRoute(
               updatedRoute.steps[0]?.execution?.process[0]?.type ===
                 "CROSS_CHAIN"
             ) {
-              resolve(updatedRoute.steps[1].execution?.process[0].txLink);
+              resolve(updatedRoute.steps[0].execution?.process[0].txLink);
             }
           } else if (
             updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
@@ -78,7 +78,7 @@ export async function executeRoute(
             updatedRoute.steps[0]?.execution?.process[0]?.status === "DONE" &&
             updatedRoute.steps[0]?.execution?.process[0]?.type === "SWAP"
           ) {
-            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+            resolve(updatedRoute.steps[0].execution?.process[1]?.txLink);
           } else if (
             updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
             updatedRoute.steps[1]?.execution?.process[1]?.type === "SWAP"
