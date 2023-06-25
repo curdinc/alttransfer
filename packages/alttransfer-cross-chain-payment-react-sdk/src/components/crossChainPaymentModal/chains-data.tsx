@@ -2,6 +2,7 @@ import { Circle } from "lucide-react";
 import {
   Arbitrum,
   Ethereum,
+  Gnosis,
   Optimism,
   Polygon,
 } from "../../assets/icons-chains";
@@ -11,6 +12,7 @@ export const chainsID = new Map<string, string>([
   ["Ethereum", "0x1"],
   ["Arbitrum One", "0xa4b1"],
   ["Optimism", "0xa"],
+  ["Gnosis", "0x64"],
 ]);
 
 export const chainHex = new Set<string>(["89", "1", "a4b1", "a"]);
@@ -22,4 +24,5 @@ export const chainsData = {
   "Arbitrum One": <Arbitrum className="rounded-full h-6 w-6" />,
   Optimism: <Optimism className="rounded-full h-6 w-6" />,
   Ethereum: <Ethereum className="rounded-full h-6 w-6" />,
+  Gnosis: <Gnosis className="rounded-full h-6 w-6" />,
 };
