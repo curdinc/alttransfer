@@ -7,12 +7,13 @@ import {
   getUserTokenBalance,
 } from "../services/alchemy/getUserTokenBalance";
 import { walletClientToSigner } from "../services/ethers";
+
 import {
   executeRoute,
   getLiFiQuote,
   getToken,
   getTokens,
-} from "../services/lifi/getQuote";
+} from "../services/lifi/getLiFiQuote";
 import { getQuote } from "../services/uniswap/getQuote";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";

@@ -1,4 +1,11 @@
-import { ADDRESS_SCANNER_URLS, LifiSwapDataReturnType, SupportedChainIds, SupportedChainIdsSchema, TXN_SCANNER_URLS, getSwaps } from "@alttransfer/cross-chain-payment-core";
+import {
+  ADDRESS_SCANNER_URLS,
+  LifiSwapDataReturnType,
+  SupportedChainIds,
+  SupportedChainIdsSchema,
+  TXN_SCANNER_URLS,
+  getSwaps,
+} from "@alttransfer/cross-chain-payment-core";
 import { CopyIcon, ExternalLink } from "lucide-react";
 import React, { useEffect } from "react";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
@@ -13,8 +20,8 @@ export default function Profile({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { connector: activeConnector, address } = useAccount();
-  const { chain, chains } = useNetwork()
-  const { disconnect } = useDisconnect()
+  const { chain, chains } = useNetwork();
+  const { disconnect } = useDisconnect();
   const [data, setData] = React.useState<LifiSwapDataReturnType>([]);
   const [chainId, setChainId] = React.useState<SupportedChainIds>("0x1");
   const size = "1.5em";
@@ -24,18 +31,20 @@ export default function Profile({
   const CopyLinkIcon = () => {
     return <CopyIcon width={size} height={size} strokeWidth={2} />;
   };
-  
-  useEffect(() => { 
-       if(chain != null) {
-        const chainIdParsed = SupportedChainIdsSchema.safeParse(`0x${chain.id.toString(16)}`);
-        if(chainIdParsed.success) {
-          setChainId(chainIdParsed.data);
-          if(address != null) {
-              getSwaps(address, chainId).then((res) => {
-                setData(res);
-              })
-         }
+
+  useEffect(() => {
+    if (chain != null) {
+      const chainIdParsed = SupportedChainIdsSchema.safeParse(
+        `0x${chain.id.toString(16)}`
+      );
+      if (chainIdParsed.success) {
+        setChainId(chainIdParsed.data);
+        if (address != null) {
+          getSwaps(address, chainId).then((res) => {
+            setData(res);
+          });
         }
+      }
     }
   }, [chain, address]);
 
@@ -54,7 +63,7 @@ export default function Profile({
               flexDirection: "column",
               gap: "1em",
               width: "100%",
-              height: "100%"
+              height: "100%",
             }}
           >
             <div className="splitText">
@@ -65,7 +74,15 @@ export default function Profile({
                 Connected with {activeConnector.name}{" "}
                 {wallets.get(activeConnector.name)}
               </div>
-              <button className="HomepageSelectButton" onClick={() => {disconnect(); setCurrentScreen(pages.HomeScreen)}}>Disconnect</button>
+              <button
+                className="HomepageSelectButton"
+                onClick={() => {
+                  disconnect();
+                  setCurrentScreen(pages.HomeScreen);
+                }}
+              >
+                Disconnect
+              </button>
             </div>
             <div>
               {/* profile pic */}
@@ -103,9 +120,26 @@ export default function Profile({
                 <tbody className="space-y-2">
                   {[...data, ...data].map((item, index) => {
                     return (
-                      <tr key={index} className="flex justify-between  w-[320px]">
-                        <td><a className="hover:underline" target="_blank" href={TXN_SCANNER_URLS[chainId] + item.transactionHash}>{formatEvmAddress(item.transactionHash)}</a></td>
-                        <td>{(new Date(parseInt(item.timestamp) * 1000)).toDateString()}</td>
+                      <tr
+                        key={index}
+                        className="flex justify-between  w-[320px]"
+                      >
+                        <td>
+                          <a
+                            className="hover:underline"
+                            target="_blank"
+                            href={
+                              TXN_SCANNER_URLS[chainId] + item.transactionHash
+                            }
+                          >
+                            {formatEvmAddress(item.transactionHash)}
+                          </a>
+                        </td>
+                        <td>
+                          {new Date(
+                            parseInt(item.timestamp) * 1000
+                          ).toDateString()}
+                        </td>
                       </tr>
                     );
                   })}

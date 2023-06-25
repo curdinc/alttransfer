@@ -1,4 +1,4 @@
-import { LiFi, Route, RoutesResponse } from "@lifi/sdk";
+import { LiFi, type Route, type RoutesResponse } from "@lifi/sdk";
 import { ethers } from "ethers";
 import { formatUnits, parseUnits } from "viem";
 import { SupportedChainIds } from "../../types/SupportedChainIds";
