@@ -1,17 +1,16 @@
-import type { AltTransferCrossChainSdkConstructorArgs } from "@alttransfer/cross-chain-payment-core";
+import { type AltTransferCrossChainSdkConstructorArgs } from "@alttransfer/cross-chain-payment-core";
 import * as Dialog from "@radix-ui/react-dialog";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as React from "react";
 import { useDestinationInfo } from "../hooks/useDestinationInfo";
 import { CrossChainPaymentProvider } from "./CrossChainPaymentContext";
+import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
 import "./crossChainPaymentModal/defaultModal.css";
 import HomePage from "./crossChainPaymentModal/homepage";
 import ModifyWallet from "./crossChainPaymentModal/modifyWallet";
 import SelectChain from "./crossChainPaymentModal/selectChain";
-import "./crossChainPaymentModal/defaultModal.css"
-import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
-import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
 import SelectToken from "./crossChainPaymentModal/selectToken";
+import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
 
 const queryClient = new QueryClient();
 
@@ -76,7 +75,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     }
     setCostInfo(randomCostInfo)
   }, [])
-
+  
   const renderPage = () => {
     switch (currentScreen) {
       case pages.HomeScreen:

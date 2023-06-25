@@ -1,11 +1,11 @@
-import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CrossIconButton, RightIconButton } from "./iconButtons";
+import React, { useState } from "react";
+import type { constInfoType } from "../CrossChainPaymentModal";
+import { pages } from "../CrossChainPaymentModal";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
-import type { constInfoType} from "../CrossChainPaymentModal";
-import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
+import { CrossIconButton, RightIconButton } from "./iconButtons";
 
 export default function HomePage({
   setCurrentScreen,
@@ -17,7 +17,7 @@ export default function HomePage({
   costInfo: constInfoType;
 }) {
   // REPLACE THIS
-  const [isConnected, setIsConnected] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
 
   return (
     <>
