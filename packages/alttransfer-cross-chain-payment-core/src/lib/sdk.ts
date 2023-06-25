@@ -27,7 +27,6 @@ export type AltTransferCrossChainSdkConstructorArgs = {
   getRecipientAddress(this: void): Promise<{ address: string }>;
   text: {
     brandName: string;
-    paymentConfirmationText: string;
   };
   config: {
     ChainAPIs: Record<"0x1" | "0x89", string>;

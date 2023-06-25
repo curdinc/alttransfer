@@ -2,7 +2,6 @@ import type { AltTransferCrossChainSdkConstructorArgs } from "@alttransfer/cross
 import * as Dialog from "@radix-ui/react-dialog";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as React from "react";
-import { useDestinationInfo } from "../hooks/useDestinationInfo";
 import { CrossChainPaymentProvider } from "./CrossChainPaymentContext";
 import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
 import "./crossChainPaymentModal/defaultModal.css";
@@ -63,8 +62,6 @@ interface modalProps {
 }
 
 const PaymentModal: React.FC<modalProps> = (props) => {
-  const { isLoadingDestinationInfo, destinationInfo, destinationError } =
-    useDestinationInfo();
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
   const [costInfo, setCostInfo] = React.useState({});
 
@@ -84,9 +81,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   const renderPage = () => {
     switch (currentScreen) {
       case pages.HomeScreen:
-        return (
-          <HomePage setCurrentScreen={setCurrentScreen} costInfo={costInfo} />
-        );
+        return <HomePage setCurrentScreen={setCurrentScreen} />;
       case pages.SelectToken:
         return <SelectToken setCurrentScreen={setCurrentScreen} />;
       case pages.ModifyWallet:
@@ -108,14 +103,6 @@ const PaymentModal: React.FC<modalProps> = (props) => {
         <div></div>;
     }
   };
-
-  console.log("destinationInfo", destinationInfo);
-  console.log("isLoadingDestinationInfo", isLoadingDestinationInfo);
-
-  if (destinationError) {
-    console.error(destinationError);
-    return <div>Something went wrong fetching payment information</div>;
-  }
 
   return (
     <Dialog.Root

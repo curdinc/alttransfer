@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useUserCurrencies } from "../../hooks/useUserToken";
+import { formatCurrency } from "../../units/formatCurrency";
 import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
@@ -130,10 +131,7 @@ export default function SelectToken({
                 <div className="flex flex-col items-end">
                   <div>{currency.formattedBalance}</div>
                   <div className="text-xs">
-                    {Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    }).format(parseFloat(currency.balanceUsdValueCents))}
+                    {formatCurrency(currency.balanceUsdValueCents)}
                   </div>
                 </div>
               </div>

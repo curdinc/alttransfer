@@ -17,9 +17,10 @@ export default function Page() {
         }}
         getItemPrice={async () => {
           return Promise.resolve({
-            amount: "100000",
+            amount: "10000000",
             chainId: "0x1",
-            isNative: true,
+            isNative: false,
+            tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
           });
         }}
         getRecipientAddress={async () => {
@@ -29,7 +30,6 @@ export default function Page() {
         }}
         text={{
           brandName: "AltTransfer",
-          paymentConfirmationText: "Confirm payment",
         }}
       >
         <button>Launch Me</button>

@@ -1,21 +1,61 @@
 import React from "react";
 import { useAccount } from "wagmi";
 import { RightIconButton } from "../../assets/iconButtons";
+import { useDestinationInfo } from "../../hooks/useDestinationInfo";
+import { getCurrencyToBePaid } from "../../units/blockchain";
+import { formatCurrency } from "../../units/formatCurrency";
 import { useCrossChainPayment } from "../CrossChainPaymentContext";
-import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
 import { chainsData } from "./chains-data";
 
 export default function HomePage({
   setCurrentScreen,
-  costInfo,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
-  costInfo: constInfoType;
 }) {
   const { isConnected } = useAccount();
   const { currentChain, currency, sdk } = useCrossChainPayment();
+
+  const onClick = () => {
+    if (!isConnected) setCurrentScreen(pages.ModifyWallet);
+    if (!currency.address) setCurrentScreen(pages.SelectToken);
+    else {
+      setCurrentScreen(pages.ConfirmPayment);
+    }
+  };
+
+  const { isLoadingDestinationInfo, destinationInfo, destinationError } =
+    useDestinationInfo();
+
+  if (destinationError) {
+    console.error(destinationError);
+    return (
+      <>
+        <NavBar
+          title={sdk.text.brandName}
+          setCurrentScreen={setCurrentScreen}
+        />
+        <div>Something went wrong fetching payment information</div>
+      </>
+    );
+  }
+  if (isLoadingDestinationInfo) {
+    return (
+      <>
+        <NavBar
+          title={sdk.text.brandName}
+          setCurrentScreen={setCurrentScreen}
+        />
+        <div className="text-center">Loading...</div>
+      </>
+    );
+  }
+
+  const balanceToBePaid = getCurrencyToBePaid(
+    currency,
+    destinationInfo?.itemInfo
+  );
 
   return (
     <>
@@ -75,9 +115,9 @@ export default function HomePage({
               gap: "0.5em",
             }}
           > */}
-          <div className="largeText">{costInfo.curCostInToken}</div>
+          <div className="largeText">{balanceToBePaid}</div>
           {/* <div style={{ color: "var(--tertiary-text)" }}>
-              ≈${costInfo.curCostInUSDC + " (" + costInfo.rate + ")"}
+              ≈${.curCostInUSDC + " (" + .rate + ")"}
             </div> */}
           {/* </div> */}
           <div style={{ color: "var(--tertiary-text)" }}>
@@ -89,20 +129,18 @@ export default function HomePage({
       <div className="SectionContainer">
         <div className="splitText">
           Cost
-          <div>${costInfo.cost + " " + "USD"}</div>
+          <div>
+            {formatCurrency(
+              destinationInfo?.itemInfo.balanceUsdValueCents || "0"
+            ) +
+              " " +
+              "USD"}
+          </div>
         </div>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <button
-          className="Button sky"
-          onClick={() => {
-            if (!isConnected) setCurrentScreen(pages.ModifyWallet);
-            else {
-              setCurrentScreen(pages.ConfirmPayment);
-            }
-          }}
-        >
+        <button className="Button sky" onClick={onClick}>
           {isConnected ? "Pay" : "Connect Wallet"}
         </button>
       </div>

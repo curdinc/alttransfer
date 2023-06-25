@@ -47,7 +47,6 @@ const CrossChainContext = createContext<{
       });
     },
     text: {
-      paymentConfirmationText: "Confirm payment",
       brandName: "Your Brand name",
     },
   }),

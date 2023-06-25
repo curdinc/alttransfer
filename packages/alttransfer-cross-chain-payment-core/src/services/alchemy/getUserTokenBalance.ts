@@ -44,7 +44,6 @@ export async function getUserTokenBalance(
 
     // Get balance of token
     let balance: number | string | null = token.tokenBalance;
-    console.log("balance", balance);
     if (!balance || !metadata.decimals) {
       continue;
     }

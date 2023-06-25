@@ -5,7 +5,7 @@ export function useDestinationInfo() {
   const { sdk } = useCrossChainPayment();
   const {
     data: destinationInfo,
-    isLoading: isLoadingDestinationInfo,
+    isInitialLoading: isLoadingDestinationInfo,
     error: destinationError,
   } = useQuery({
     queryKey: ["getDestinationInfo"],

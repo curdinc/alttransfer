@@ -105,7 +105,7 @@ export async function getToken(
   const truncatedBalance =
     formattedAmount.split(".")[0] +
     "." +
-    formattedAmount.split(".")[1].slice(0, 6);
+    (formattedAmount.split(".")[1]?.slice(0, 6) ?? "00");
   return {
     address: tokenInfo.address,
     decimals: tokenInfo.decimals,
