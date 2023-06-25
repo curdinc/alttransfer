@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { defaultCurrency, useCrossChainPayment } from "../CrossChainPaymentContext";
+import React from "react";
+import { useSwitchNetwork } from "wagmi";
+import {
+  defaultCurrency,
+  useCrossChainPayment,
+} from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
 import { ChainsDataType, chainHex, chainsData, chainsID } from "./chains-data";
@@ -12,11 +15,8 @@ export default function SelectChain({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { currentChain, setCurrentChain, setCurrency } = useCrossChainPayment();
-  const {isConnected} = useAccount()
 
-  const { chain } = useNetwork()
-  const { chains, error, isLoading, pendingChainId, switchNetwork, } =
-    useSwitchNetwork();
+  const { chains, switchNetwork } = useSwitchNetwork();
   var intersectionChains = chains
     .map((item, i) => {
       return chainHex.has(item.id.toString(16)) ? item.name : null;
@@ -24,15 +24,6 @@ export default function SelectChain({
     .filter((value) => value != null);
   var supportedChains = intersectionChains.map((item, i) => item ?? "");
 
-  useEffect(() => {
-    if (isConnected && chainsID.has(chain?.name??"")) {
-      setCurrentChain(chain?.name as any?? "Chain")
-    }else {
-      setCurrentChain("Chain")
-    }
-  }, [isConnected])
-
-  
   return (
     <>
       <NavBar
@@ -53,7 +44,7 @@ export default function SelectChain({
             if (chainsID.has(item)) {
               switchNetwork?.(parseInt(chainsID.get(item) ?? ""));
             }
-            setCurrency(defaultCurrency)
+            setCurrency(defaultCurrency);
             setCurrentScreen(pages.HomeScreen);
           }}
         >

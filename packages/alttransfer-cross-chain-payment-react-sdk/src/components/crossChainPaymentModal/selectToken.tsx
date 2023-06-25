@@ -14,7 +14,6 @@ export default function SelectToken({
     useUserCurrencies();
   const [currencySearch, setCurrencySearch] = useState("");
   const [filteredCurrencies, setFilteredCurrencies] = useState(currencies);
-
   const { setCurrency } = useCrossChainPayment();
 
   React.useEffect(() => {

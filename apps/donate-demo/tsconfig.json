@@ -3,9 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     },
     "plugins": [
       {
@@ -17,10 +15,7 @@
     "resolveJsonModule": true,
     "jsx": "preserve"
   },
-  "exclude": [
-    "node_modules",
-    ".next"
-  ],
+  "exclude": ["node_modules", ".next"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

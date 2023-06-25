@@ -1,7 +1,7 @@
 import { LiFi } from "@lifi/sdk";
 import { ethers } from "ethers";
 import { formatUnits, Transport, WalletClient, zeroAddress } from "viem";
-import { Chain, mainnet } from "viem/chains";
+import { Chain } from "viem/chains";
 import {
   getTokenMetadata,
   getUserTokenBalance,
@@ -298,9 +298,6 @@ export class AltTransferCrossChainSdk {
     currency: TokenInfo;
     optimisticSettlement: boolean;
   }) {
-    await walletClient.addChain({
-      chain: mainnet,
-    });
     const signer = walletClientToSigner(walletClient);
 
     const toToken = await this.getItemPriceInfo();
@@ -313,7 +310,6 @@ export class AltTransferCrossChainSdk {
       toToken,
       hexChainId: currency.chainId,
     });
-    console.log("quote", quote);
-    await executeRoute(quote, signer);
+    return await executeRoute(quote, signer, optimisticSettlement);
   }
 }
