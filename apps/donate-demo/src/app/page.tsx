@@ -12,8 +12,6 @@ export default function Page() {
               "https://solemn-holy-layer.quiknode.pro/859bd0ec14bf3fa09445f2ceddbd9cef5c5f436c/",
             "0x89":
               "https://red-flashy-glade.matic.quiknode.pro/06e9538c594d0769ad9a0c3fd5ab4b883442619f/",
-            "0xa": "",
-            "0xa4b1": "",
           },
           alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "",
         }}

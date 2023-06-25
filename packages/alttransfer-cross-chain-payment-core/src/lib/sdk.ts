@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import type { WalletClient } from "viem";
+import { formatUnits, WalletClient } from "viem";
 import {
   getTokenMetadata,
   getUserTokenBalance,
@@ -25,7 +25,7 @@ export type AltTransferCrossChainSdkConstructorArgs = {
   getRecipientAddress(this: void): Promise<{ address: string }>;
 
   config: {
-    ChainAPIs: Record<SupportedChainIds, string>;
+    ChainAPIs: Record<"0x1" | "0x89", string>;
     alchemyApiKey: string;
   };
 };
@@ -113,6 +113,10 @@ export class AltTransferCrossChainSdk {
               name: token.name ?? "",
               symbol: token.symbol ?? "",
               balance: token.tokenBalance ?? "0",
+              formattedBalance: formatUnits(
+                BigInt(token.tokenBalance ?? 0),
+                token.decimals ?? 18
+              ),
               chainId: chainId,
               tokenUri: token.logo ?? undefined,
               balanceUsdValueCents: "",
@@ -122,7 +126,6 @@ export class AltTransferCrossChainSdk {
             const quote = await getQuote({
               fromToken: result,
               hexChainId: chainId,
-              userAddress: address,
               alchemyApiKey: this.config.alchemyApiKey,
             });
 
@@ -156,6 +159,9 @@ export class AltTransferCrossChainSdk {
                 ...result,
                 balanceUsdValueCents,
                 tokenExchangeUsdValueCents,
+                uniSwapInfo: {
+                  feeAmount: quote.feeAmount,
+                },
               };
             } catch (e) {
               console.log("error", e);
@@ -174,9 +180,11 @@ export class AltTransferCrossChainSdk {
                 ...result,
                 balanceUsdValueCents: balanceUsdValueCents,
                 tokenExchangeUsdValueCents: "0",
+                uniSwapInfo: {
+                  feeAmount: quote.feeAmount,
+                },
               };
             }
-            return result;
           })
       )) as any;
     } else {
@@ -217,13 +225,16 @@ export class AltTransferCrossChainSdk {
               name: token.name,
               symbol: token.symbol,
               balance: token.totalBalance,
+              formattedBalance: formatUnits(
+                BigInt(token.totalBalance),
+                token.decimals
+              ),
               chainId,
               tokenUri: metadata.logo,
               balanceUsdValueCents: "",
               tokenExchangeUsdValueCents: "",
             },
             hexChainId: chainId,
-            userAddress: address,
             alchemyApiKey: this.config.alchemyApiKey,
           });
           console.log("quote", quote);
@@ -258,16 +269,23 @@ export class AltTransferCrossChainSdk {
               name: token.name,
               symbol: token.symbol,
               balance: token.totalBalance,
+              formattedBalance: formatUnits(
+                BigInt(token.totalBalance),
+                token.decimals
+              ),
               chainId,
               tokenUri: metadata.logo,
               balanceUsdValueCents,
               tokenExchangeUsdValueCents,
+              uniSwapInfo: {
+                feeAmount: quote.feeAmount,
+              },
             };
           } catch (e) {
             console.log("error", e);
             const usdValueBigNumber = ethers.utils.parseUnits(
               quote.formattedUsdcValue,
-              20
+              18
             );
             const balanceUsdValueCents = ethers.utils.formatUnits(
               usdValueBigNumber
@@ -282,10 +300,17 @@ export class AltTransferCrossChainSdk {
               name: token.name,
               symbol: token.symbol,
               balance: token.totalBalance,
+              formattedBalance: formatUnits(
+                BigInt(token.totalBalance),
+                token.decimals
+              ),
               chainId,
               tokenUri: metadata.logo,
               balanceUsdValueCents,
               tokenExchangeUsdValueCents: "0",
+              uniSwapInfo: {
+                feeAmount: quote.feeAmount,
+              },
             };
           }
         })
@@ -308,6 +333,7 @@ export class AltTransferCrossChainSdk {
       name: "USDC",
       symbol: "USDC",
       balance: "",
+      formattedBalance: "",
       balanceUsdValueCents: "",
       tokenExchangeUsdValueCents: "",
     };
