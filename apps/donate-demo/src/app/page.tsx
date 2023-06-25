@@ -19,7 +19,7 @@ export default function Page() {
         getItemPrice={async () => {
           return Promise.resolve({
             amount: "100000",
-            chainId: "0x1",
+            chainId: "0xa",
             isNative: false,
             tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
           });

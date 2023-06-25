@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 
 import { useDestinationInfo } from "../../hooks/useDestinationInfo";
@@ -9,10 +8,8 @@ import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import NavBar from "../navBar";
 export default function ConfirmPayment({
   setCurrentScreen,
-  costInfo,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
-  costInfo: constInfoType;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [doneLoading, setDoneLoading] = useState(false);

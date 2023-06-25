@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { RightIconButton } from "../../assets/iconButtons";
 import { useDestinationInfo } from "../../hooks/useDestinationInfo";
@@ -7,7 +7,7 @@ import { formatCurrency } from "../../units/formatCurrency";
 import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
-import { chainsData, chainsID } from "./chains-data";
+import { chainsData } from "./chains-data";
 
 export default function HomePage({
   setCurrentScreen,
@@ -26,13 +26,6 @@ export default function HomePage({
     }
   };
 
-  useEffect(() => {
-    if (isConnected && chainsID.has(chain?.name??"")) {
-      setCurrentChain(chain?.name??"Chain")
-    }else {
-      setCurrentChain("Chain")
-    }
-  }, [isConnected])
 
   const { isLoadingDestinationInfo, destinationInfo, destinationError } =
     useDestinationInfo();
