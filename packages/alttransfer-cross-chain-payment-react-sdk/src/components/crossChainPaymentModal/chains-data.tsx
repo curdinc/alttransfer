@@ -17,6 +17,7 @@ export const chainHex = new Set<string>(["89", "1", "a4b1", "a"]);
 
 export type ChainsDataType = keyof typeof chainsData;
 export const chainsData = {
+  Chain: <Circle className="rounded-full h-6 w-6" />,
   Polygon: <Polygon className="rounded-full h-6 w-6" />,
   "Arbitrum One": <Arbitrum className="rounded-full h-6 w-6" />,
   Optimism: <Optimism className="rounded-full h-6 w-6" />,
