@@ -221,15 +221,7 @@ function LogoCloud() {
             />
           </a>
         </div>
-        <div className="flex items-center justify-start">
-          <a href="https://stripe.com" aria-label="stripe.com Link">
-            <img
-              src="/stripe.svg"
-              alt="stripe.com Logo"
-              className="h-12 text-white"
-            />
-          </a>
-        </div>
+
         <div className="flex items-center justify-start">
           <a href="https://supabase.io" aria-label="supabase.io Link">
             <img
