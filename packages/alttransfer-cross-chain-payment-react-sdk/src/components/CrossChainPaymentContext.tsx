@@ -38,7 +38,7 @@ const CrossChainContext = createContext<{
       return await Promise.resolve({
         chainId: "0x1",
         isNative: true,
-        price: "0",
+        amount: "0",
       });
     },
     getRecipientAddress: async () => {
@@ -47,7 +47,6 @@ const CrossChainContext = createContext<{
       });
     },
     text: {
-      paymentConfirmationText: "Confirm payment",
       brandName: "Your Brand name",
     },
   }),

@@ -11,7 +11,7 @@ This package enables you to seamlessly accept payment from your user from any ch
 To get started, install the SDK
 
 ```bash
-npm install @alttransfer/cross-chain-payment-js-sdk @alttransfer/cross-chain-payment-react-sdk wagmi@1.2.1 viem@1.1.6
+npm install @alttransfer/cross-chain-payment-react-sdk wagmi@1.2.1 viem@1.1.6
 ```
 
 Once installed, we now configure wagmi for react. Refer to [wagmi docs](https://wagmi.sh/react/getting-started) for more information on the various settings
@@ -82,20 +82,20 @@ type SupportedChainIds = '0x89' | '0xa' | '0xa4b1' | '0xa86a' | '0x1'
 <AltTransferCrossChainPayment
     async getItemPrice(): Promise<{
             isNative: true,
-            price: string,
+            amount: string,
             chainId: SupportedChainIds
         } | {
             isNative: false,
             tokenAddress: string,
-            price: string
+            amount: string
             chainId: SupportedChainIds
         }>{
         // you can fetch the price from your backend if needed here.
         return  {
             isNative: false,
             tokenAddress: '0x123456789...',
-            // price is in the currency's base units
-            price: '12000000000'
+            // amount is in the currency's base units
+            amount: '12000000000'
         }
     }
     async getRecipientAddress(): Promise<{address: string}> {
@@ -104,7 +104,11 @@ type SupportedChainIds = '0x89' | '0xa' | '0xa4b1' | '0xa86a' | '0x1'
     }
     optimisticSettlement={false}
     config={{
-      QuickNodeApiKey: "",
+      ChainAPIs: {
+        "0x1": "",
+        "0x89": "",
+      },
+      alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "",
     }}
 />
 ```
@@ -138,7 +142,7 @@ If you don't use react and still want the benefit of allowing your users to easi
 To get started, install the SDK
 
 ```bash
-npm install @alttransfer/cross-chain-payment-js-sdk @wagmi/core@1.2.1 viem@1.1.6
+npm install @alttransfer/cross-chain-payment-core @wagmi/core@1.2.1 viem@1.1.6
 ```
 
 Once installed, we now configure wagmi core. Refer to [wagmi docs](https://wagmi.sh/core/getting-started) for more information on the various settings
@@ -200,30 +204,36 @@ Now, you can simply use the payment component anywhere in your app where you wan
 const sdk = AltTransferCrossChainPaymentSdk({
   async getItemPrice(): Promise<{
           isNative: true,
-          price: string,
+          amount: string,
           chainId: SupportedChainIds
       } | {
           isNative: false,
           tokenAddress: string,
-          price: string
+          amount: string
           chainId: SupportedChainIds
       }>{
       // you can fetch the price from your backend if needed here.
       return  {
           isNative: false,
           tokenAddress: '0x123456789...',
-          // price is in the currency's base units
-          price: '12000000000'
+          // amount is in the currency's base units
+          amount: '12000000000'
       }
   }
   async getRecipientAddress(): Promise<{address: string}> {
       // you can fetch the address you want the token or coin to be sent too.
       return '0x123456789...'
   }
-  config={{
-    // Needed to display an accurate Token balance available for the users to choose.
-    QuickNodeApiKey: "",
-  }}
+
+  optimisticSettlement={false}
+    config={{
+      // Needed to display an accurate Token balance available for the users to choose.
+      ChainAPIs: {
+        "0x1": "",
+        "0x89": "",
+      },
+      alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "",
+    }}
 })
 
 // this will return a list of tokens that the user can use to pay for the transaction.

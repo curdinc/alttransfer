@@ -1,9 +1,11 @@
+import { LiFi } from "@lifi/sdk";
 import { ethers } from "ethers";
-import { formatUnits, WalletClient } from "viem";
+import { formatUnits, WalletClient, zeroAddress } from "viem";
 import {
   getTokenMetadata,
   getUserTokenBalance,
 } from "../services/alchemy/getUserTokenBalance";
+import { getToken, getTokens } from "../services/lifi/getQuote";
 import { getQuote } from "../services/uniswap/getQuote";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";
@@ -12,20 +14,19 @@ export type AltTransferCrossChainSdkConstructorArgs = {
   getItemPrice(this: void): Promise<
     | {
         isNative: true;
-        price: string;
+        amount: string;
         chainId: SupportedChainIds;
       }
     | {
         isNative: false;
         tokenAddress: string;
-        price: string;
+        amount: string;
         chainId: SupportedChainIds;
       }
   >;
   getRecipientAddress(this: void): Promise<{ address: string }>;
   text: {
     brandName: string;
-    paymentConfirmationText: string;
   };
   config: {
     ChainAPIs: Record<"0x1" | "0x89", string>;
@@ -38,6 +39,7 @@ export class AltTransferCrossChainSdk {
   private getRecipientAddress: AltTransferCrossChainSdkConstructorArgs["getRecipientAddress"];
   private config: AltTransferCrossChainSdkConstructorArgs["config"];
   text: AltTransferCrossChainSdkConstructorArgs["text"];
+  private LiFi: LiFi;
   /**
    * @example
    * const sdk = AltTransferCrossChainPaymentSdk({
@@ -65,6 +67,9 @@ export class AltTransferCrossChainSdk {
    * @param {AltTransferCrossChainSdkConstructorArgs["config"]} args.config - Miscellaneous configuration options.
    */
   constructor(args: AltTransferCrossChainSdkConstructorArgs) {
+    this.LiFi = new LiFi({
+      integrator: "",
+    });
     this.text = args.text;
     this.config = args.config;
     this.getItemPrice = args.getItemPrice;
@@ -91,6 +96,7 @@ export class AltTransferCrossChainSdk {
     // todo: call Quicknode or alchemy api to get user token list
     let tokens: TokenInfo[] = [];
 
+    // not supported by quicknode
     if (chainId === "0xa" || chainId === "0xa4b1") {
       const tokenList = await getUserTokenBalance(
         chainId,
@@ -108,7 +114,6 @@ export class AltTransferCrossChainSdk {
               !token.name ||
               !token.symbol
             ) {
-              console.log("missing token info");
               return;
             }
 
@@ -127,69 +132,7 @@ export class AltTransferCrossChainSdk {
               balanceUsdValueCents: "",
               tokenExchangeUsdValueCents: "",
             };
-
-            const quote = await getQuote({
-              fromToken: result,
-              hexChainId: chainId,
-              alchemyApiKey: this.config.alchemyApiKey,
-            });
-
-            console.log("quote", quote);
-            if (!quote) return;
-
-            let tokenExchangeUsdValueCents = "0";
-            try {
-              tokenExchangeUsdValueCents = ethers.utils
-                .parseUnits(quote.formattedUsdcValue, 6)
-                .mul(100)
-                .toString()
-                .split(".")[0];
-              console.log(
-                "tokenExchangeUsdValueCents",
-                tokenExchangeUsdValueCents
-              );
-
-              const usdValueBigNumber = ethers.utils.parseUnits(
-                quote.formattedUsdcValue,
-                6
-              );
-              const balanceUsdValueCents = ethers.utils.formatUnits(
-                usdValueBigNumber
-                  .mul(ethers.BigNumber.from(token.tokenBalance))
-                  .div(ethers.utils.parseUnits("1", token.decimals)),
-                6
-              );
-              console.log("balanceUsdValueCents", balanceUsdValueCents);
-              return {
-                ...result,
-                balanceUsdValueCents,
-                tokenExchangeUsdValueCents,
-                uniSwapInfo: {
-                  feeAmount: quote.feeAmount,
-                },
-              };
-            } catch (e) {
-              console.log("error", e);
-              const usdValueBigNumber = ethers.utils.parseUnits(
-                quote.formattedUsdcValue,
-                18
-              );
-              const balanceUsdValueCents = ethers.utils.formatUnits(
-                usdValueBigNumber
-                  .mul(ethers.BigNumber.from(token.tokenBalance))
-                  .div(ethers.utils.parseUnits("1", token.decimals)),
-                18
-              );
-              console.log("balanceUsdValueCents", balanceUsdValueCents);
-              return {
-                ...result,
-                balanceUsdValueCents: balanceUsdValueCents,
-                tokenExchangeUsdValueCents: "0",
-                uniSwapInfo: {
-                  feeAmount: quote.feeAmount,
-                },
-              };
-            }
+            return result;
           })
       )) as any;
     } else {
@@ -199,7 +142,6 @@ export class AltTransferCrossChainSdk {
       const tokenList = await provider.send("qn_getWalletTokenBalance", [
         { wallet: address },
       ]);
-      console.log("tokenList", tokenList);
 
       tokens = await Promise.all(
         tokenList.result.map(async (token: any) => {
@@ -219,23 +161,28 @@ export class AltTransferCrossChainSdk {
             this.config.alchemyApiKey
           );
           if (!metadata.logo) {
-            console.log("missing logo");
             return;
           }
 
+          const result = {
+            address: token.address,
+            decimals: parseInt(token.decimals),
+            name: token.name,
+            symbol: token.symbol,
+            balance: token.totalBalance,
+            formattedBalance: formatUnits(
+              BigInt(token.totalBalance),
+              token.decimals
+            ),
+            chainId,
+            tokenUri: metadata.logo,
+            balanceUsdValueCents: "",
+            tokenExchangeUsdValueCents: "",
+          };
+
           const quote = await getQuote({
             fromToken: {
-              address: token.address,
-              decimals: parseInt(token.decimals),
-              name: token.name,
-              symbol: token.symbol,
-              balance: token.totalBalance,
-              formattedBalance: formatUnits(
-                BigInt(token.totalBalance),
-                token.decimals
-              ),
-              chainId,
-              tokenUri: metadata.logo,
+              ...result,
               balanceUsdValueCents: "",
               tokenExchangeUsdValueCents: "",
             },
@@ -269,17 +216,7 @@ export class AltTransferCrossChainSdk {
             );
             console.log("balanceUsdValueCents", balanceUsdValueCents);
             return {
-              address: token.address,
-              decimals: parseInt(token.decimals),
-              name: token.name,
-              symbol: token.symbol,
-              balance: token.totalBalance,
-              formattedBalance: formatUnits(
-                BigInt(token.totalBalance),
-                token.decimals
-              ),
-              chainId,
-              tokenUri: metadata.logo,
+              ...result,
               balanceUsdValueCents,
               tokenExchangeUsdValueCents,
               uniSwapInfo: {
@@ -300,17 +237,7 @@ export class AltTransferCrossChainSdk {
             );
             console.log("balanceUsdValueCents", balanceUsdValueCents);
             return {
-              address: token.address,
-              decimals: parseInt(token.decimals),
-              name: token.name,
-              symbol: token.symbol,
-              balance: token.totalBalance,
-              formattedBalance: formatUnits(
-                BigInt(token.totalBalance),
-                token.decimals
-              ),
-              chainId,
-              tokenUri: metadata.logo,
+              ...result,
               balanceUsdValueCents,
               tokenExchangeUsdValueCents: "0",
               uniSwapInfo: {
@@ -322,7 +249,7 @@ export class AltTransferCrossChainSdk {
       );
     }
 
-    return tokens.filter((token) => !!token);
+    return getTokens(address, chainId);
   }
 
   /**
@@ -330,18 +257,13 @@ export class AltTransferCrossChainSdk {
    */
   async getItemPriceInfo(): Promise<TokenInfo> {
     const itemPrice = await this.getItemPrice();
-    // todo: fetch the token info and remove below
-    return {
-      address: "0x123456789...",
-      chainId: "0x89",
-      decimals: 18,
-      name: "USDC",
-      symbol: "USDC",
-      balance: "",
-      formattedBalance: "",
-      balanceUsdValueCents: "",
-      tokenExchangeUsdValueCents: "",
-    };
+
+    const tokenInfo = await getToken(
+      itemPrice.isNative ? zeroAddress : itemPrice.tokenAddress,
+      itemPrice.chainId,
+      itemPrice.amount
+    );
+    return tokenInfo;
   }
 
   /**
