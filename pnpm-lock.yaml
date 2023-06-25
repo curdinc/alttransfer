@@ -84,6 +84,9 @@ importers:
       '@uniswap/smart-order-router':
         specifier: 3.13.2-hotfix2
         version: 3.13.2-hotfix2(hardhat@2.16.0)(jsbi@3.2.5)
+      '@uniswap/v3-periphery':
+        specifier: ^1.4.3
+        version: 1.4.3
       '@uniswap/v3-sdk':
         specifier: ^3.9.0
         version: 3.9.0(hardhat@2.16.0)

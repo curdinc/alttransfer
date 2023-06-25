@@ -93,10 +93,20 @@ export class AltTransferCrossChainSdk {
         this.config.alchemyApiKey
       );
 
-      tokens = await Promise.all(
+      tokens = (await Promise.all(
         tokenList
           .filter((token) => !!token.logo)
           .map(async (token) => {
+            if (
+              token.tokenBalance === "0" ||
+              !token.decimals ||
+              !token.name ||
+              !token.symbol
+            ) {
+              console.log("missing token info");
+              return;
+            }
+
             const result = {
               address: token.contractAddress,
               decimals: token.decimals ?? 18,
@@ -108,6 +118,7 @@ export class AltTransferCrossChainSdk {
               balanceUsdValueCents: "",
               tokenExchangeUsdValueCents: "",
             };
+
             const quote = await getQuote({
               fromToken: result,
               hexChainId: chainId,
@@ -116,9 +127,58 @@ export class AltTransferCrossChainSdk {
             });
 
             console.log("quote", quote);
+            if (!quote) return;
+
+            let tokenExchangeUsdValueCents = "0";
+            try {
+              tokenExchangeUsdValueCents = ethers.utils
+                .parseUnits(quote.formattedUsdcValue, 6)
+                .mul(100)
+                .toString()
+                .split(".")[0];
+              console.log(
+                "tokenExchangeUsdValueCents",
+                tokenExchangeUsdValueCents
+              );
+
+              const usdValueBigNumber = ethers.utils.parseUnits(
+                quote.formattedUsdcValue,
+                6
+              );
+              const balanceUsdValueCents = ethers.utils.formatUnits(
+                usdValueBigNumber
+                  .mul(ethers.BigNumber.from(token.tokenBalance))
+                  .div(ethers.utils.parseUnits("1", token.decimals)),
+                6
+              );
+              console.log("balanceUsdValueCents", balanceUsdValueCents);
+              return {
+                ...result,
+                balanceUsdValueCents,
+                tokenExchangeUsdValueCents,
+              };
+            } catch (e) {
+              console.log("error", e);
+              const usdValueBigNumber = ethers.utils.parseUnits(
+                quote.formattedUsdcValue,
+                18
+              );
+              const balanceUsdValueCents = ethers.utils.formatUnits(
+                usdValueBigNumber
+                  .mul(ethers.BigNumber.from(token.tokenBalance))
+                  .div(ethers.utils.parseUnits("1", token.decimals)),
+                18
+              );
+              console.log("balanceUsdValueCents", balanceUsdValueCents);
+              return {
+                ...result,
+                balanceUsdValueCents: balanceUsdValueCents,
+                tokenExchangeUsdValueCents: "0",
+              };
+            }
             return result;
           })
-      );
+      )) as any;
     } else {
       const provider = new ethers.providers.JsonRpcProvider(
         this.config.ChainAPIs[chainId]
@@ -126,57 +186,113 @@ export class AltTransferCrossChainSdk {
       const tokenList = await provider.send("qn_getWalletTokenBalance", [
         { wallet: address },
       ]);
-      const token_list = tokenList.result.filter(
-        (token: any) =>
-          token.totalBalance !== "0" &&
-          !!token.decimals &&
-          !!token.name &&
-          !!token.symbol
-      );
+      console.log("tokenList", tokenList);
 
       tokens = await Promise.all(
-        (
-          await Promise.all(
-            token_list.map(async (token: any) => {
-              const metadata = await getTokenMetadata(
-                token.address,
-                chainId,
-                this.config.alchemyApiKey
-              );
+        tokenList.result.map(async (token: any) => {
+          if (
+            token.totalBalance === "0" ||
+            !token.decimals ||
+            !token.name ||
+            !token.symbol
+          ) {
+            console.log("missing token info");
+            return;
+          }
 
-              return {
-                address: token.address,
-                decimals: parseInt(token.decimals),
-                name: token.name,
-                symbol: token.symbol,
-                balance: token.totalBalance,
-                chainId,
-                tokenUri: metadata.logo ?? undefined,
-                balanceUsdValueCents: "",
-                tokenExchangeUsdValueCents: "",
-              };
-            })
-          )
-        )
-          .filter((token: any) => {
-            console.log("token to filter", token);
-            return !!token.tokenUri;
-          })
-          .map(async (token: any) => {
-            console.log("token item ", token);
-            const quote = await getQuote({
-              fromToken: token,
-              hexChainId: chainId,
-              userAddress: address,
-              alchemyApiKey: this.config.alchemyApiKey,
-            });
-            console.log("quote", quote);
-            return token;
-          })
+          const metadata = await getTokenMetadata(
+            token.address,
+            chainId,
+            this.config.alchemyApiKey
+          );
+          if (!metadata.logo) {
+            console.log("missing logo");
+            return;
+          }
+
+          const quote = await getQuote({
+            fromToken: {
+              address: token.address,
+              decimals: parseInt(token.decimals),
+              name: token.name,
+              symbol: token.symbol,
+              balance: token.totalBalance,
+              chainId,
+              tokenUri: metadata.logo,
+              balanceUsdValueCents: "",
+              tokenExchangeUsdValueCents: "",
+            },
+            hexChainId: chainId,
+            userAddress: address,
+            alchemyApiKey: this.config.alchemyApiKey,
+          });
+          console.log("quote", quote);
+          if (!quote || !quote.formattedUsdcValue) return;
+
+          let tokenExchangeUsdValueCents = "0";
+          try {
+            tokenExchangeUsdValueCents = ethers.utils
+              .parseUnits(quote.formattedUsdcValue, 6)
+              .mul(100)
+              .toString()
+              .split(".")[0];
+            console.log(
+              "tokenExchangeUsdValueCents",
+              tokenExchangeUsdValueCents
+            );
+
+            const usdValueBigNumber = ethers.utils.parseUnits(
+              quote.formattedUsdcValue,
+              6
+            );
+            const balanceUsdValueCents = ethers.utils.formatUnits(
+              usdValueBigNumber
+                .mul(ethers.BigNumber.from(token.totalBalance))
+                .div(ethers.utils.parseUnits("1", token.decimals)),
+              6
+            );
+            console.log("balanceUsdValueCents", balanceUsdValueCents);
+            return {
+              address: token.address,
+              decimals: parseInt(token.decimals),
+              name: token.name,
+              symbol: token.symbol,
+              balance: token.totalBalance,
+              chainId,
+              tokenUri: metadata.logo,
+              balanceUsdValueCents,
+              tokenExchangeUsdValueCents,
+            };
+          } catch (e) {
+            console.log("error", e);
+            const usdValueBigNumber = ethers.utils.parseUnits(
+              quote.formattedUsdcValue,
+              20
+            );
+            const balanceUsdValueCents = ethers.utils.formatUnits(
+              usdValueBigNumber
+                .mul(ethers.BigNumber.from(token.totalBalance))
+                .div(ethers.utils.parseUnits("1", token.decimals)),
+              18
+            );
+            console.log("balanceUsdValueCents", balanceUsdValueCents);
+            return {
+              address: token.address,
+              decimals: parseInt(token.decimals),
+              name: token.name,
+              symbol: token.symbol,
+              balance: token.totalBalance,
+              chainId,
+              tokenUri: metadata.logo,
+              balanceUsdValueCents,
+              tokenExchangeUsdValueCents: "0",
+            };
+          }
+        })
       );
     }
 
-    return tokens;
+    return tokens.filter((token) => !!token);
   }
 
   /**
