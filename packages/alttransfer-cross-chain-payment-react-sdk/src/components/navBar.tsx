@@ -1,10 +1,20 @@
 
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { pages } from "./CrossChainPaymentModal";
+import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import { LeftIconButton, ProfileEmptyIcon } from "../assets/iconButtons";
+import { pages } from "./CrossChainPaymentModal";
+
+
 export default function NavBar({ setCurrentScreen, backLink, title, NavRight }:
   { setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>, backLink?: pages, title: string, NavRight?: React.ReactNode }) {
+    const { address, isConnected } = useAccount();
+    const ensName = useEnsName({
+      address: address,
+    })
+    const ensAvatar = useEnsAvatar({
+        name: ensName.data,
+    })
   return (
     <div className="DialogHeading">
       {
@@ -21,7 +31,15 @@ export default function NavBar({ setCurrentScreen, backLink, title, NavRight }:
       <Dialog.Title className="DialogTitle">{title}</Dialog.Title>
       {NavRight ? NavRight :
         <div onClick={() => setCurrentScreen(pages.Profile)}>
-          <ProfileEmptyIcon />
+          {
+            ensAvatar.data?
+              <img
+                className="h-6 w-6 rounded-full image-cover"
+                src={ensAvatar.data??""}
+              />
+             : 
+            <ProfileEmptyIcon />
+          }
         </div>
       }
     </div>

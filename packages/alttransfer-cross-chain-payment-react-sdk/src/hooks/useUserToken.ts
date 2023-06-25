@@ -1,5 +1,6 @@
 import { SupportedChainIdsSchema } from "@alttransfer/cross-chain-payment-core";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { useCrossChainPayment } from "../components/CrossChainPaymentContext";
 
@@ -8,7 +9,7 @@ export function useUserCurrencies() {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const {
-    data: currencies,
+    data,
     isLoading: isLoadingCurrencies,
     error: currenciesError,
   } = useQuery({
@@ -26,8 +27,12 @@ export function useUserCurrencies() {
     enabled: !!chain && !!address,
   });
 
+  const currencies = useMemo(() => {
+    return data ?? [];
+  }, [data]);
+
   return {
-    currencies: currencies ?? [],
+    currencies: currencies,
     isLoadingCurrencies,
     currenciesError,
   };

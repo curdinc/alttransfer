@@ -233,6 +233,9 @@ importers:
       '@types/react':
         specifier: ^18.0.9
         version: 18.0.26
+      '@types/react-blockies':
+        specifier: ^1.4.1
+        version: 1.4.1
       '@types/react-dom':
         specifier: ^18.0.4
         version: 18.0.9
@@ -2857,6 +2860,12 @@ packages:
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+
+  /@types/react-blockies@1.4.1:
+    resolution: {integrity: sha512-aDX0g0hwzdodkGLSDNUQr6gXxwclGjnhS8jhsR8uQhAfe/7i3GZD/NDcSlQ2SiQiLhfRxX3NlY+nvBwf5Y0tTg==}
+    dependencies:
+      '@types/react': 18.0.26
+    dev: true
 
   /@types/react-dom@18.0.9:
     resolution: {integrity: sha512-qnVvHxASt/H7i+XG1U1xMiY5t+IHcPGUK7TDMDzom08xa7e86eCeKOiLZezwCKVxJn6NEiiy2ekgX8aQssjIKg==}

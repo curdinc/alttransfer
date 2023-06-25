@@ -5,6 +5,7 @@ import { formatEvmAddress } from "../../units/blockchain";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
 import { wallets } from "./modifyWallet";
+import { useDisconnect } from 'wagmi'
 
 export default function Profile({
   setCurrentScreen,
@@ -12,7 +13,7 @@ export default function Profile({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { connector: activeConnector, address } = useAccount();
-
+  const { disconnect } = useDisconnect()
   const size = "1.5em";
   const ExternalLinkIcon = () => {
     return <ExternalLink width={size} height={size} strokeWidth={2} />;
@@ -46,7 +47,7 @@ export default function Profile({
                 Connected with {activeConnector.name}{" "}
                 {wallets.get(activeConnector.name)}
               </div>
-              <button className="HomepageSelectButton">Change</button>
+              <button className="HomepageSelectButton" onClick={() => {disconnect(); setCurrentScreen(pages.HomeScreen)}}>Disconnect</button>
             </div>
             <div>
               {/* profile pic */}

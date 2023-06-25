@@ -1,6 +1,6 @@
-import { LiFi } from "@lifi/sdk";
+import { LiFi, Route, RoutesResponse } from "@lifi/sdk";
+import { ethers } from "ethers";
 import { formatUnits, parseUnits } from "viem";
-import { USDC_ADDRESSES } from "../../constants/USDC";
 import { SupportedChainIds } from "../../types/SupportedChainIds";
 import { TokenInfo } from "../../types/TokenInfo";
 
@@ -15,39 +15,54 @@ export async function getLiFiQuote({
   fromAmount,
   toToken,
   hexChainId,
+  targetAddress,
+  userAddress,
 }: {
   fromToken: TokenInfo;
   fromAmount: string;
-  toToken?: TokenInfo;
+  toToken: TokenInfo;
+  targetAddress: string;
+  userAddress: string;
   hexChainId: SupportedChainIds;
 }) {
-  const targetToken = toToken ?? {
-    address: USDC_ADDRESSES[hexChainId],
-    decimals: 6,
-    name: "USDC",
-    symbol: "USDC",
-    chainId: hexChainId,
-  };
-
   const lifi = new LiFi({
     integrator: "",
   });
-  const { tokens } = await lifi.getTokens({
-    chains: [parseInt(fromToken.chainId)],
-  });
-  const balances = await lifi.getTokenBalances(
-    "0xb3E9C57fB983491416a0C77b07629C0991c3FD59",
-    tokens[parseInt(fromToken.chainId)]
-  );
-  console.log("balances", balances);
+
   const route = await lifi.getRoutes({
     fromAmount,
     fromChainId: parseInt(fromToken.chainId),
     fromTokenAddress: fromToken.address,
     toChainId: parseInt(toToken?.chainId ?? hexChainId),
-    toTokenAddress: targetToken.address,
+    toTokenAddress: toToken.address,
+    fromAddress: userAddress,
+    toAddress: targetAddress,
+    options: { slippage: 0.005 },
   });
   console.log("route", route);
+  return route;
+}
+
+export async function executeRoute(
+  routeResp: RoutesResponse,
+  signer: ethers.Signer
+) {
+  const routes = routeResp.routes;
+  const chosenRoute = routes[0];
+
+  const updateCallback = (updatedRoute: Route) => {
+    console.log("updatedRoute", updatedRoute);
+    console.log("Ping! Everytime a status update is made!");
+  };
+  const lifi = new LiFi({
+    integrator: "",
+  });
+  // executing a route
+  const route = await lifi.executeRoute(signer, chosenRoute, {
+    ...updateCallback,
+  });
+  console.log("route chosen", route);
+  return route;
 }
 
 export async function getTokens(userAddress: string, chainId: string) {
