@@ -2,7 +2,7 @@ import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
-import { CrossIconButton, LeftIconButton } from "./iconButtons";
+import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
 

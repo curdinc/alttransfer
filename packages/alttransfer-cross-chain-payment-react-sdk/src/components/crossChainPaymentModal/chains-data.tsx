@@ -1,3 +1,4 @@
+import { Circle } from "lucide-react";
 import {
   Arbitrum,
   Avalanche,
@@ -13,4 +14,5 @@ export const chainsData = {
   Arbitrum: <Arbitrum />,
   Optimism: <Optimism />,
   Fantom: <Fantom />,
+  Chain: <Circle />
 };

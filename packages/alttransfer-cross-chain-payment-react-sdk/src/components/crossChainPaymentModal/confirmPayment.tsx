@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CrossIconButton, LeftIconButton } from "./iconButtons";
+import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
@@ -59,33 +59,33 @@ export default function ConfirmPayment({
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-            <button
-              className="Button"
-              onClick={() => {
-                // setCurrentScreen(pages.SubmittedPayment);
-                // call API here, when returned set doneLoading = true
-                setIsLoading(true);
-              }}
-            >
-              Confirm payment
-            </button>
-          </div>
+              <button
+                className="Button"
+                onClick={() => {
+                  // setCurrentScreen(pages.SubmittedPayment);
+                  // call API here, when returned set doneLoading = true
+                  setIsLoading(true);
+                }}
+              >
+                Confirm payment
+              </button>
+            </div>
           </>
         )
       }
 
       {
         isLoading && !doneLoading && (
-          <div style={{display:"flex", flexDirection:'column', justifyContent:"center", alignItems:'center', gap: "1em", marginBottom: '1em'}}>
-            <div className="lds-ring" style={{margin: "1em 0em"}}><div></div><div></div><div></div><div></div></div>
+          <div style={{ display: "flex", flexDirection: 'column', justifyContent: "center", alignItems: 'center', gap: "1em", marginBottom: '1em' }}>
+            <div className="lds-ring" style={{ margin: "1em 0em" }}><div></div><div></div><div></div><div></div></div>
             <div>Confirm this transaction in your wallet</div>
-            <div style={{color:"var(--tertiary-text)", fontSize:"0.9em"}} 
-            // REMOVE THIS
+            <div style={{ color: "var(--tertiary-text)", fontSize: "0.9em" }}
+              // REMOVE THIS
               onClick={() => {
                 setDoneLoading(true)
               }}>
-                {"Paying " + costInfo.curCostInToken + costInfo.curToken + " to Your Brand Name"}
-                </div>
+              {"Paying " + costInfo.curCostInToken + costInfo.curToken + " to Your Brand Name"}
+            </div>
           </div>
         )
       }

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Coinbase, MetaMask, WalletConnect } from "../../assets/icons-wallets";
-import { CrossIconButton, LeftIconButton } from "./iconButtons";
+import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
 import { Circle } from "lucide-react";
@@ -37,7 +37,7 @@ export default function ModifyWallet({
           <LeftIconButton />
         </button>
         <Dialog.Title className="DialogTitle">
-          Select a paying wallet
+          Select a wallet
         </Dialog.Title>
         <Dialog.Close asChild>
           <button className="IconButton" aria-label="Close">

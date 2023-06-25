@@ -26,11 +26,11 @@ export enum pages {
 
 export type constInfoType = {
   curToken: string,
-    curCostInToken: string,
-    curCostInUSDC : string,
-    rate: string,
-    bal: string,
-    cost: string,
+  curCostInToken: string,
+  curCostInUSDC: string,
+  rate: string,
+  bal: string,
+  cost: string,
 } | Record<string, never>
 export type AltTransferCrossChainPaymentModalProps = {
   children: React.ReactNode;
@@ -61,7 +61,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   const { isLoadingDestinationInfo, destinationInfo, destinationError } =
     useDestinationInfo();
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
-  const [curChain, setCurChain] = React.useState("Fantom");
+  const [curChain, setCurChain] = React.useState("Chain");
   const [costInfo, setCostInfo] = React.useState({})
 
   React.useEffect(() => {
@@ -69,7 +69,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     const randomCostInfo = {
       curToken: "BTC",
       curCostInToken: "0.353",
-      curCostInUSDC : "6339.2",
+      curCostInUSDC: "6339.2",
       rate: "-0.5%",
       bal: "0",
       cost: "123",
@@ -88,13 +88,13 @@ const PaymentModal: React.FC<modalProps> = (props) => {
       case pages.ModifyWallet:
         return <ModifyWallet setCurrentScreen={setCurrentScreen} />;
       case pages.SelectChain:
-        return  <SelectChain
-            setCurrentScreen={setCurrentScreen}
-            currentChain={curChain}
-            setCurrentChain={setCurChain}
-          />
+        return <SelectChain
+          setCurrentScreen={setCurrentScreen}
+          currentChain={curChain}
+          setCurrentChain={setCurChain}
+        />
       case pages.ConfirmPayment:
-        return <ConfirmPayment setCurrentScreen={setCurrentScreen} currentChain={curChain} costInfo={costInfo}/>
+        return <ConfirmPayment setCurrentScreen={setCurrentScreen} currentChain={curChain} costInfo={costInfo} />
       case pages.SubmittedPayment:
         return <SubmittedPayment setCurrentScreen={setCurrentScreen} />;
       default:
@@ -110,15 +110,15 @@ const PaymentModal: React.FC<modalProps> = (props) => {
     return <div>Something went wrong fetching payment information</div>;
   }
 
-return (
-<Dialog.Root>
-  <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
-  <Dialog.Portal>
-    <Dialog.Overlay className="DialogOverlay" />
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="DialogOverlay" />
 
-    <Dialog.Content className="DialogContent">
-     {renderPage()}
-    </Dialog.Content>
-  </Dialog.Portal>
-</Dialog.Root>);
+        <Dialog.Content className="DialogContent">
+          {renderPage()}
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>);
 }
