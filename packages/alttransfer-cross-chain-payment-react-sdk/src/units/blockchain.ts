@@ -15,7 +15,7 @@ export function getCurrencyToBePaid(currency: TokenInfo, itemInfo?: TokenInfo) {
           currency.balanceUsdValueCents === "0"
             ? "1"
             : currency.balanceUsdValueCents,
-          18
+          currency.decimals
         ),
       18 + currency.decimals
     )

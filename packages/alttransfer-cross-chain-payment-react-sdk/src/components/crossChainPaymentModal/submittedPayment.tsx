@@ -1,4 +1,6 @@
+import { ExternalLinkIcon } from "lucide-react";
 import React from "react";
+import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
 
@@ -7,6 +9,8 @@ export default function SubmittedPayment({
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
+  const { txnLink } = useCrossChainPayment();
+
   return (
     <>
       <NavBar title="Payment submitted" setCurrentScreen={setCurrentScreen} />
@@ -18,11 +22,19 @@ export default function SubmittedPayment({
           gap: "1em",
         }}
       >
-        <div className="checkmark-wrapper circle" style={{margin:"1em"}}>
-          <span className="checkmark"/>
+        <div className="checkmark-wrapper circle" style={{ margin: "1em" }}>
+          <span className="checkmark" />
         </div>
         Payment submitted successfully
-        <div>View receipt</div>
+        <a
+          className="ProfileLinks blue"
+          onClick={() => {
+            if (!txnLink) return;
+            window.open(txnLink);
+          }}
+        >
+          View receipt <ExternalLinkIcon />
+        </a>
       </div>
     </>
   );

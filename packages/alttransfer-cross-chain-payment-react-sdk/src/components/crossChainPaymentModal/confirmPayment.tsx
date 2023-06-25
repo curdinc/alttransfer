@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { pages } from "../CrossChainPaymentModal";
 
+import { parseUnits } from "viem";
+import { useWalletClient } from "wagmi";
 import { useDestinationInfo } from "../../hooks/useDestinationInfo";
 import { getCurrencyToBePaid } from "../../units/blockchain";
 import { formatCurrency } from "../../units/formatCurrency";
@@ -13,7 +15,8 @@ export default function ConfirmPayment({
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [doneLoading, setDoneLoading] = useState(false);
-  const { currentChain, currency, sdk } = useCrossChainPayment();
+  const { currency, sdk, setTxnLink } = useCrossChainPayment();
+  const { data: walletClient } = useWalletClient();
   const { isLoadingDestinationInfo, destinationInfo, destinationError } =
     useDestinationInfo();
   const balanceToBePaid = getCurrencyToBePaid(
@@ -46,6 +49,7 @@ export default function ConfirmPayment({
       </>
     );
   }
+
   useEffect(() => {
     if (doneLoading) setCurrentScreen(pages.SubmittedPayment);
   }, [doneLoading, setCurrentScreen]);
@@ -94,7 +98,29 @@ export default function ConfirmPayment({
               onClick={() => {
                 // setCurrentScreen(pages.SubmittedPayment);
                 // call API here, when returned set doneLoading = true
+                if (!walletClient) return console.error("No wallet client");
                 setIsLoading(true);
+                sdk
+                  .pay({
+                    currency,
+                    optimisticSettlement: false,
+                    payingAmount: parseUnits(
+                      balanceToBePaid,
+                      currency.decimals
+                    ).toString(),
+                    walletClient,
+                  })
+                  .catch((e) => {
+                    console.error(e);
+                    setIsLoading(false);
+                  })
+                  .then((result) => {
+                    if (result) {
+                      setTxnLink(result);
+                      setIsLoading(false);
+                      setDoneLoading(true);
+                    }
+                  });
               }}
             >
               Confirm payment
@@ -119,17 +145,11 @@ export default function ConfirmPayment({
             style={{ margin: "1em" }}
           ></div>
           <div>Confirm this transaction in your wallet</div>
-          <div
-            style={{ color: "var(--tertiary-text)", fontSize: "0.9em" }}
-            // REMOVE THIS
-            onClick={() => {
-              setDoneLoading(true);
-            }}
-          >
+          <div style={{ color: "var(--tertiary-text)", fontSize: "0.9em" }}>
             {"Paying " +
-              destinationInfo?.itemInfo.formattedBalance +
+              balanceToBePaid +
               " " +
-              destinationInfo?.itemInfo.symbol +
+              currency.symbol +
               " to Your Brand Name"}
           </div>
         </div>

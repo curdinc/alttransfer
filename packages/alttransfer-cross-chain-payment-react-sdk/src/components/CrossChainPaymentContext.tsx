@@ -2,9 +2,10 @@ import {
   AltTransferCrossChainSdk,
   TokenInfo,
 } from "@alttransfer/cross-chain-payment-core";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useAccount, useNetwork } from "wagmi";
 import type { AltTransferCrossChainPaymentModalProps } from "./CrossChainPaymentModal";
-import { ChainsDataType } from "./crossChainPaymentModal/chains-data";
+import { ChainsDataType, chainsID } from "./crossChainPaymentModal/chains-data";
 
 export const defaultCurrency: TokenInfo = {
   address: "",
@@ -25,6 +26,8 @@ const CrossChainContext = createContext<{
   setCurrency: React.Dispatch<React.SetStateAction<TokenInfo>>;
   currentChain: ChainsDataType;
   setCurrentChain: React.Dispatch<React.SetStateAction<ChainsDataType>>;
+  txnLink?: string;
+  setTxnLink: React.Dispatch<React.SetStateAction<string>>;
 }>({
   sdk: new AltTransferCrossChainSdk({
     config: {
@@ -54,6 +57,7 @@ const CrossChainContext = createContext<{
   setCurrency: () => {},
   currentChain: "Ethereum",
   setCurrentChain: () => {},
+  setTxnLink: () => {},
 });
 export function CrossChainPaymentProvider({
   children,
@@ -64,6 +68,18 @@ export function CrossChainPaymentProvider({
 }: AltTransferCrossChainPaymentModalProps) {
   const [currency, setCurrency] = useState<TokenInfo>(defaultCurrency);
   const [currentChain, setCurrentChain] = useState<ChainsDataType>("Chain");
+  const [txnLink, setTxnLink] = useState<string>("");
+
+  const { isConnected } = useAccount();
+  const { chain } = useNetwork();
+
+  useEffect(() => {
+    if (isConnected && chainsID.has(chain?.name ?? "")) {
+      setCurrentChain((chain?.name as any) ?? "Chain");
+    } else {
+      setCurrentChain("Chain");
+    }
+  }, [isConnected]);
 
   const sdk = new AltTransferCrossChainSdk({
     config,
@@ -79,6 +95,8 @@ export function CrossChainPaymentProvider({
         setCurrency,
         currentChain,
         setCurrentChain,
+        txnLink,
+        setTxnLink,
       }}
     >
       {children}

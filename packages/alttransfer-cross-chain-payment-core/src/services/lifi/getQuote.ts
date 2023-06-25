@@ -37,7 +37,6 @@ export async function getLiFiQuote({
     toTokenAddress: toToken.address,
     fromAddress: userAddress,
     toAddress: targetAddress,
-    options: { slippage: 0.005 },
   });
   console.log("route", route);
   return route;
@@ -45,24 +44,54 @@ export async function getLiFiQuote({
 
 export async function executeRoute(
   routeResp: RoutesResponse,
-  signer: ethers.Signer
+  signer: ethers.Signer,
+  optimisticSettlement: boolean
 ) {
   const routes = routeResp.routes;
   const chosenRoute = routes[0];
 
-  const updateCallback = (updatedRoute: Route) => {
-    console.log("updatedRoute", updatedRoute);
-    console.log("Ping! Everytime a status update is made!");
-  };
   const lifi = new LiFi({
     integrator: "",
   });
   // executing a route
-  const route = await lifi.executeRoute(signer, chosenRoute, {
-    ...updateCallback,
+  return new Promise<string | undefined>(async (resolve, reject) => {
+    try {
+      await lifi.executeRoute(signer, chosenRoute, {
+        updateRouteHook: (updatedRoute: Route) => {
+          console.log("updatedRoute", updatedRoute);
+          console.log("Ping! Everytime a status update is made!");
+          if (optimisticSettlement) {
+            if (
+              updatedRoute.steps[0]?.execution?.process[0]?.status === "DONE" &&
+              updatedRoute.steps[0]?.execution?.process[0]?.type ===
+                "CROSS_CHAIN"
+            ) {
+              resolve(updatedRoute.steps[1].execution?.process[0].txLink);
+            }
+          } else if (
+            updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
+            updatedRoute.steps[1]?.execution?.process[1]?.type ===
+              "RECEIVING_CHAIN"
+          ) {
+            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+          } else if (
+            updatedRoute.steps[0]?.execution?.process[0]?.status === "DONE" &&
+            updatedRoute.steps[0]?.execution?.process[0]?.type === "SWAP"
+          ) {
+            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+          } else if (
+            updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
+            updatedRoute.steps[1]?.execution?.process[1]?.type === "SWAP"
+          ) {
+            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+          }
+        },
+      });
+    } catch (e) {
+      console.error("Error executing route", e);
+      reject(e);
+    }
   });
-  console.log("route chosen", route);
-  return route;
 }
 
 export async function getTokens(userAddress: string, chainId: string) {
@@ -76,33 +105,35 @@ export async function getTokens(userAddress: string, chainId: string) {
     userAddress,
     tokens[parseInt(chainId)]
   );
-  return balances
-    .filter((balance) => {
-      return balance.amount !== "0";
-    })
-    .map((balance): TokenInfo => {
-      const amountBigInt = parseUnits(balance.amount, balance.decimals);
-      const usdBigInt = parseUnits(balance.priceUSD, 18);
-      const truncatedBalance =
-        balance.amount.split(".")[0] +
-        "." +
-        balance.amount.split(".")[1].slice(0, 6);
-      return {
-        address: balance.address,
-        decimals: balance.decimals,
-        name: balance.name,
-        symbol: balance.symbol,
-        chainId: `0x${parseInt(chainId).toString(16)}` as SupportedChainIds,
-        formattedBalance: truncatedBalance,
-        balance: amountBigInt.toString(),
-        tokenExchangeUsdValueCents: balance.priceUSD,
-        tokenUri: balance.logoURI,
-        balanceUsdValueCents: formatUnits(
-          amountBigInt * usdBigInt,
-          18 + balance.decimals
-        ),
-      };
-    });
+  return await Promise.all(
+    balances
+      .filter((balance) => {
+        return balance.amount !== "0";
+      })
+      .map(async (balance): Promise<TokenInfo> => {
+        const amountBigInt = parseUnits(balance.amount, balance.decimals);
+        const usdBigInt = parseUnits(balance.priceUSD, 18);
+        const truncatedBalance =
+          balance.amount.split(".")[0] +
+          "." +
+          balance.amount.split(".")[1].slice(0, 6);
+        return {
+          address: balance.address,
+          decimals: balance.decimals,
+          name: balance.name,
+          symbol: balance.symbol,
+          chainId: `0x${parseInt(chainId).toString(16)}` as SupportedChainIds,
+          formattedBalance: truncatedBalance,
+          balance: amountBigInt.toString(),
+          tokenExchangeUsdValueCents: balance.priceUSD,
+          tokenUri: balance.logoURI,
+          balanceUsdValueCents: formatUnits(
+            amountBigInt * usdBigInt,
+            18 + balance.decimals
+          ),
+        };
+      })
+  );
 }
 
 export async function getToken(

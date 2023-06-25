@@ -17,10 +17,10 @@ export default function Page() {
         }}
         getItemPrice={async () => {
           return Promise.resolve({
-            amount: "100000",
+            amount: "100000000000000",
             chainId: "0xa",
-            isNative: false,
-            tokenAddress: "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+            isNative: true,
+            // tokenAddress: "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
           });
         }}
         getRecipientAddress={async () => {
