@@ -14,3 +14,4 @@ const LiFiSwapDataSchema = z.object({
 });
 
 export const LifiSwapDataReturnSchema = z.array(LiFiSwapDataSchema);
+export type LifiSwapDataReturnType = z.infer<typeof LifiSwapDataReturnSchema>;
