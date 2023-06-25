@@ -221,11 +221,11 @@ div {
 }
 
 .HomepageSelectButton {
-  padding: 0.25em 1em;
+  padding: 0.25em 0.8em;
   border-radius: 1.5em;
   display: flex;
   align-items: center;
-  gap: 0.75em;
+  gap: 0.5em;
   color: var(--primary-text);
   transition: background-color 0.175s ease-in-out;
   background-color: var(--secondary);
@@ -281,7 +281,6 @@ div {
     transform: translate(-50%, -50%) scale(1);
   }
 }
-
 
 /* SPINNER */
 .lds-ring {

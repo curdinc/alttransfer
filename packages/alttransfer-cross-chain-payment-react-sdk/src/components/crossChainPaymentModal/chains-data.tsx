@@ -23,9 +23,9 @@ export const chainHex = new Set<string>([
 )
 
 export const chainsData = {
-  Polygon: <Polygon />,
-  "Arbitrum One": <Arbitrum />,
-  Optimism: <Optimism />,
-  Ethereum: <Ethereum />,
-  Chain: <Circle />
+  Polygon: <Polygon className="rounded-full h-6 w-6" />,
+  "Arbitrum One": <Arbitrum className="rounded-full h-6 w-6" />,
+  Optimism: <Optimism className="rounded-full h-6 w-6" />,
+  Ethereum: <Ethereum className="rounded-full h-6 w-6" />,
+  Chain: <Circle className="rounded-full h-6 w-6" />,
 };
