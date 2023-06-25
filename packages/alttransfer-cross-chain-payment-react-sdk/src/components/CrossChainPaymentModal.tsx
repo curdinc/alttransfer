@@ -4,14 +4,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as React from "react";
 import { useDestinationInfo } from "../hooks/useDestinationInfo";
 import { CrossChainPaymentProvider } from "./CrossChainPaymentContext";
+import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
 import "./crossChainPaymentModal/defaultModal.css";
 import HomePage from "./crossChainPaymentModal/homepage";
 import ModifyWallet from "./crossChainPaymentModal/modifyWallet";
-import SelectChain from "./crossChainPaymentModal/selectChain";
-import ConfirmPayment from "./crossChainPaymentModal/confirmPayment";
-import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
-import SelectToken from "./crossChainPaymentModal/selectToken";
 import Profile from "./crossChainPaymentModal/profile";
+import SelectChain from "./crossChainPaymentModal/selectChain";
+import SelectToken from "./crossChainPaymentModal/selectToken";
+import SubmittedPayment from "./crossChainPaymentModal/submittedPayment";
 
 const queryClient = new QueryClient();
 
@@ -22,17 +22,19 @@ export enum pages {
   ModifyWallet = "modifyWallet",
   ConfirmPayment = "confirmPayment",
   SubmittedPayment = "paymentSubmit",
-  Profile = "profile"
+  Profile = "profile",
 }
 
-export type constInfoType = {
-  curToken: string,
-  curCostInToken: string,
-  curCostInUSDC: string,
-  rate: string,
-  bal: string,
-  cost: string,
-} | Record<string, never>
+export type constInfoType =
+  | {
+      curToken: string;
+      curCostInToken: string;
+      curCostInUSDC: string;
+      rate: string;
+      bal: string;
+      cost: string;
+    }
+  | Record<string, never>;
 
 export type AltTransferCrossChainPaymentModalProps = {
   children: React.ReactNode;
@@ -47,6 +49,7 @@ export function AltTransferCrossChainPaymentModal(
         config={props.config}
         getItemPrice={props.getItemPrice}
         getRecipientAddress={props.getRecipientAddress}
+        text={props.text}
       >
         <PaymentModal transferAmount="123">{props.children}</PaymentModal>
       </CrossChainPaymentProvider>
@@ -63,9 +66,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   const { isLoadingDestinationInfo, destinationInfo, destinationError } =
     useDestinationInfo();
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
-  const [curChain, setCurChain] = React.useState("Chain");
-  const [costInfo, setCostInfo] = React.useState({})
-  const [brandName, setBrandName] = React.useState("Your brand name");
+  const [costInfo, setCostInfo] = React.useState({});
 
   React.useEffect(() => {
     // Replace this
@@ -76,32 +77,33 @@ const PaymentModal: React.FC<modalProps> = (props) => {
       rate: "-0.5%",
       bal: "0",
       cost: "123",
-    }
-    setCostInfo(randomCostInfo)
-  }, [])
+    };
+    setCostInfo(randomCostInfo);
+  }, []);
 
   const renderPage = () => {
     switch (currentScreen) {
       case pages.HomeScreen:
         return (
-          <HomePage setCurrentScreen={setCurrentScreen} curChain={curChain} costInfo={costInfo} brandName={brandName} />
+          <HomePage setCurrentScreen={setCurrentScreen} costInfo={costInfo} />
         );
       case pages.SelectToken:
         return <SelectToken setCurrentScreen={setCurrentScreen} />;
       case pages.ModifyWallet:
         return <ModifyWallet setCurrentScreen={setCurrentScreen} />;
       case pages.SelectChain:
-        return <SelectChain
-          setCurrentScreen={setCurrentScreen}
-          currentChain={curChain}
-          setCurrentChain={setCurChain}
-        />
+        return <SelectChain setCurrentScreen={setCurrentScreen} />;
       case pages.ConfirmPayment:
-        return <ConfirmPayment setCurrentScreen={setCurrentScreen} currentChain={curChain} costInfo={costInfo} />
+        return (
+          <ConfirmPayment
+            setCurrentScreen={setCurrentScreen}
+            costInfo={costInfo}
+          />
+        );
       case pages.SubmittedPayment:
         return <SubmittedPayment setCurrentScreen={setCurrentScreen} />;
       case pages.Profile:
-        return <Profile setCurrentScreen={setCurrentScreen} />
+        return <Profile setCurrentScreen={setCurrentScreen} />;
       default:
         <div></div>;
     }
@@ -116,7 +118,11 @@ const PaymentModal: React.FC<modalProps> = (props) => {
   }
 
   return (
-    <Dialog.Root onOpenChange={() => { setCurrentScreen(pages.HomeScreen) }}>
+    <Dialog.Root
+      onOpenChange={() => {
+        setCurrentScreen(pages.HomeScreen);
+      }}
+    >
       <Dialog.Trigger asChild>{props.children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />
@@ -125,5 +131,6 @@ const PaymentModal: React.FC<modalProps> = (props) => {
           {renderPage()}
         </Dialog.Content>
       </Dialog.Portal>
-    </Dialog.Root>);
-}
+    </Dialog.Root>
+  );
+};

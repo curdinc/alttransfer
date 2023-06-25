@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 
+import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import NavBar from "../navBar";
 export default function ConfirmPayment({
   setCurrentScreen,
-  currentChain,
   costInfo,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
-  currentChain: string;
   costInfo: constInfoType;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [doneLoading, setDoneLoading] = useState(false);
+  const { currentChain } = useCrossChainPayment();
 
   useEffect(() => {
     if (doneLoading) setCurrentScreen(pages.SubmittedPayment);

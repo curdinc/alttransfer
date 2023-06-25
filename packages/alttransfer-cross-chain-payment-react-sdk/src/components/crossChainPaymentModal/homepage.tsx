@@ -1,29 +1,26 @@
 import React from "react";
 import { useAccount } from "wagmi";
 import { RightIconButton } from "../../assets/iconButtons";
+import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
-import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
 
 export default function HomePage({
   setCurrentScreen,
-  curChain,
   costInfo,
-  brandName,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
-  curChain: string;
   costInfo: constInfoType;
-  brandName: string;
 }) {
   const { isConnected } = useAccount();
+  const { currentChain, currency, sdk } = useCrossChainPayment();
 
   return (
     <>
       {/* FIRST ROW -> TITLE + CLOSE BUTTON */}
-      <NavBar title={brandName} setCurrentScreen={setCurrentScreen} />
+      <NavBar title={sdk.text.brandName} setCurrentScreen={setCurrentScreen} />
 
       {/* SECOND SECTION -> token / chain / cost */}
       <div className={`SectionContainer`}>
@@ -36,7 +33,19 @@ export default function HomePage({
             style={{ opacity: isConnected ? "1" : "0.35" }}
             disabled={isConnected ? false : true}
           >
-            token
+            {currency.address ? (
+              <>
+                {currency.tokenUri && (
+                  <img
+                    className="h-6 w-6 rounded-full image-cover"
+                    src={currency.tokenUri}
+                  />
+                )}
+                {currency.symbol}
+              </>
+            ) : (
+              "token"
+            )}
           </button>
           <button
             className="HomepageSelectButton"
@@ -46,8 +55,8 @@ export default function HomePage({
             style={{ opacity: isConnected ? "1" : "0.35" }}
             disabled={isConnected ? false : true}
           >
-            {chainsData[curChain as chainsDataType]}
-            {curChain}
+            {chainsData[currentChain]}
+            {currentChain}
             {<RightIconButton />}
           </button>
         </div>
@@ -72,7 +81,7 @@ export default function HomePage({
             </div> */}
           {/* </div> */}
           <div style={{ color: "var(--tertiary-text)" }}>
-            {isConnected ? `Balance: ${costInfo.bal}` : ""}
+            {isConnected ? `Balance: ${currency.formattedBalance}` : ""}
           </div>
         </div>
       </div>
@@ -89,7 +98,9 @@ export default function HomePage({
           className="Button sky"
           onClick={() => {
             if (!isConnected) setCurrentScreen(pages.ModifyWallet);
-            else setCurrentScreen(pages.ConfirmPayment);
+            else {
+              setCurrentScreen(pages.ConfirmPayment);
+            }
           }}
         >
           {isConnected ? "Pay" : "Connect Wallet"}

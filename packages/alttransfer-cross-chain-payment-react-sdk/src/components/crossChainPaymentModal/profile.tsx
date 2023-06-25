@@ -23,41 +23,60 @@ export default function Profile({
 
   return (
     <>
-      <NavBar backLink={pages.HomeScreen} title="Account" setCurrentScreen={setCurrentScreen} />
+      <NavBar
+        backLink={pages.HomeScreen}
+        title="Account"
+        setCurrentScreen={setCurrentScreen}
+      />
       <div className="splitText">
-
-        {
-          activeConnector && address
-            ? <div style={{ display: 'flex', flexDirection: 'column', gap: '1em', width: '100%' }}>
-              <div className="splitText">
-                <div style={{ display: "flex", alignItems: 'center', gap: '0.5em' }} className="tertiaryText">
-                  Connected with {activeConnector.name} {wallets.get(activeConnector.name)}
-                </div>
-                <button className="HomepageSelectButton">
-                  Change
-                </button>
+        {activeConnector && address ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1em",
+              width: "100%",
+            }}
+          >
+            <div className="splitText">
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "0.5em" }}
+                className="tertiaryText"
+              >
+                Connected with {activeConnector.name}{" "}
+                {wallets.get(activeConnector.name)}
               </div>
-              <div>
-                {/* profile pic */}
-                {/* address */}
-                <div className="largeText">{formatEvmAddress(address.toString())}</div>
-              </div>
-              <div style={{ width: '100%' }} className="splitText tertiaryText">
-                <a
-                  className="ProfileLinks blue"
-                  onClick={() => { window.open(`https://etherscan.io/address/${address}`) }}>
-                  View on explore <ExternalLinkIcon />
-                </a>
-                <a
-                  className="ProfileLinks gray"
-                  onClick={() => { navigator.clipboard.writeText(address) }}
-                >
-                  Copy address <CopyLinkIcon />
-                </a>
+              <button className="HomepageSelectButton">Change</button>
+            </div>
+            <div>
+              {/* profile pic */}
+              {/* address */}
+              <div className="largeText">
+                {formatEvmAddress(address.toString())}
               </div>
             </div>
-            : "Wallet not connected."
-        }
+            <div style={{ width: "100%" }} className="splitText tertiaryText">
+              <a
+                className="ProfileLinks blue"
+                onClick={() => {
+                  window.open(`https://etherscan.io/address/${address}`);
+                }}
+              >
+                View on explore <ExternalLinkIcon />
+              </a>
+              <a
+                className="ProfileLinks gray"
+                onClick={() => {
+                  navigator.clipboard.writeText(address);
+                }}
+              >
+                Copy address <CopyLinkIcon />
+              </a>
+            </div>
+          </div>
+        ) : (
+          "Wallet not connected."
+        )}
       </div>
     </>
   );

@@ -27,6 +27,10 @@ export default function Page() {
             address: "0x123",
           });
         }}
+        text={{
+          brandName: "AltTransfer",
+          paymentConfirmationText: "Confirm payment",
+        }}
       >
         <button>Launch Me</button>
       </AltTransferCrossChainPaymentModal>
