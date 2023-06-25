@@ -1,9 +1,10 @@
 import React from "react";
+import { useSwitchNetwork } from "wagmi";
 import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
-import type { ChainsDataType } from "./chains-data";
-import { chainsData } from "./chains-data";
+import { ChainsDataType, chainHex, chainsData, chainsID } from "./chains-data";
+import "./defaultModal.css";
 
 export default function SelectChain({
   setCurrentScreen,
@@ -11,6 +12,13 @@ export default function SelectChain({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { currentChain, setCurrentChain } = useCrossChainPayment();
+
+  const { chains, error, isLoading, pendingChainId, switchNetwork } =
+    useSwitchNetwork();
+  var intersectionChains = chains
+    .map((item, i) => (chainHex.has(item.id.toString(16)) ? item.name : null))
+    .filter((value) => value != null);
+  var supportedChains = intersectionChains.map((item, i) => item ?? "");
   return (
     <>
       <NavBar
@@ -18,9 +26,8 @@ export default function SelectChain({
         title="Select chain"
         setCurrentScreen={setCurrentScreen}
       />
-      {Object.keys(chainsData).map((item) => (
+      {supportedChains.map((item) => (
         <button
-          key={item}
           className="ModifyWalletButton"
           style={{
             backgroundColor:
@@ -28,6 +35,9 @@ export default function SelectChain({
           }}
           onClick={() => {
             setCurrentChain(item as ChainsDataType);
+            if (chainsID.has(item)) {
+              switchNetwork?.(parseInt(chainsID.get(item) ?? ""));
+            }
             setCurrentScreen(pages.HomeScreen);
           }}
         >

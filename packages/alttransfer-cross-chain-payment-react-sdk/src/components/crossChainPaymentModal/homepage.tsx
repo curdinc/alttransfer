@@ -98,7 +98,9 @@ export default function HomePage({
           className="Button sky"
           onClick={() => {
             if (!isConnected) setCurrentScreen(pages.ModifyWallet);
-            else setCurrentScreen(pages.ConfirmPayment);
+            else {
+              setCurrentScreen(pages.ConfirmPayment);
+            }
           }}
         >
           {isConnected ? "Pay" : "Connect Wallet"}
