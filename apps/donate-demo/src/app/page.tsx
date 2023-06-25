@@ -17,7 +17,7 @@ export default function Page() {
         }}
         getItemPrice={async () => {
           return Promise.resolve({
-            price: "100000",
+            amount: "100000",
             chainId: "0x1",
             isNative: true,
           });

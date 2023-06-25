@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUserCurrencies } from "../../hooks/useUserToken";
 import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
@@ -11,15 +11,18 @@ export default function SelectToken({
 }) {
   const { currencies, currenciesError, isLoadingCurrencies } =
     useUserCurrencies();
-  const [currencySearch, setCurrencySearch] = React.useState("");
-  const [filteredCurrencies, setFilteredCurrencies] =
-    React.useState(currencies);
+  console.log("currencies", currencies);
+  const [currencySearch, setCurrencySearch] = useState("");
+  const [filteredCurrencies, setFilteredCurrencies] = useState([
+    ...currencies,
+    ...currencies,
+  ]);
 
   const { currency, setCurrency } = useCrossChainPayment();
 
   React.useEffect(() => {
     if (currencySearch === "") {
-      setFilteredCurrencies(currencies);
+      setFilteredCurrencies([...currencies, ...currencies]);
     } else {
       setFilteredCurrencies(
         currencies.filter((currency) => {
@@ -96,7 +99,7 @@ export default function SelectToken({
         title="Select token"
         setCurrentScreen={setCurrentScreen}
       />
-      <div>
+      <div className="overflow-hidden overflow-scroll-auto">
         <fieldset className="Fieldset">
           <input
             className="Input"
@@ -112,6 +115,7 @@ export default function SelectToken({
           {filteredCurrencies.map((currency) => {
             return (
               <div
+                key={currency.address}
                 className="flex justify-between hover:bg-gray-700 px-4 py-2"
                 onClick={() => {
                   setCurrency(currency);

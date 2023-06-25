@@ -19,9 +19,9 @@
   --ck-brand-metamask-10: #e4751f;
   --ck-brand-metamask-11: #fef5e7;
   --ck-brand-metamask-12: #e3c8ab;
-  --ck-chain-ethereum-01: #25292E;
+  --ck-chain-ethereum-01: #25292e;
   --ck-chain-ethereum-02: #fff;
-  --ck-chain-ethereum-03: #DFE0E0;
+  --ck-chain-ethereum-03: #dfe0e0;
 
   /* Needed for checkmark */
   --check-size: 60px;
@@ -83,9 +83,11 @@ div {
 
 .DialogContent {
   background: rgb(43, 46, 60);
-  background: linear-gradient(151deg,
-      rgba(43, 46, 60, 1) 8%,
-      rgba(17, 19, 28, 1) 97%);
+  background: linear-gradient(
+    151deg,
+    rgba(43, 46, 60, 1) 8%,
+    rgba(17, 19, 28, 1) 97%
+  );
   border-radius: 1em;
   border: 1px solid var(--border-emphasis);
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
@@ -100,13 +102,14 @@ div {
   min-height: 340px;
   padding: 2em 1.75em 2em;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  height: 40vh;
 }
 
 .DialogContent:focus {
   outline: none;
 }
 
-.DialogContent>* {
+.DialogContent > * {
   margin-bottom: 1em;
 }
 
@@ -151,7 +154,7 @@ div {
   height: 32px;
   margin-top: 1em;
   transition: background-color 0.3s ease-in-out;
-  box-shadow:  0.5em 0.1em  1em var(--primary-shadow);
+  box-shadow: 0.5em 0.1em 1em var(--primary-shadow);
   background-color: var(--primary);
   /* background: var(--primary-shadow);
   background: linear-gradient(
@@ -235,7 +238,8 @@ div {
   border-radius: 1em;
   padding: 1em 1em;
   gap: 1em;
-  box-shadow: 0 0 0 1px var(--border-emphasis), 0em 0em  0.4em var(--primary-shadow);
+  box-shadow: 0 0 0 1px var(--border-emphasis),
+    0em 0em 0.4em var(--primary-shadow);
   box-sizing: border-box;
   background-color: var(--background-secondary);
 }

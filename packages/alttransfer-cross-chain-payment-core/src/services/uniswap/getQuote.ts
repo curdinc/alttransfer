@@ -4,15 +4,9 @@ import IUniswapV3PoolABI from "@uniswap/v3-core/artifacts/contracts/interfaces/I
 import QuoterABI from "@uniswap/v3-periphery/artifacts/contracts/lens/Quoter.sol/Quoter.json";
 import { FeeAmount, Pool } from "@uniswap/v3-sdk";
 import { ethers } from "ethers";
+import { USDC_ADDRESSES } from "../../constants/USDC";
 import type { SupportedChainIds } from "../../types/SupportedChainIds";
 import type { TokenInfo } from "../../types/TokenInfo";
-
-export const USDC_ADDRESSES: Record<SupportedChainIds, string> = {
-  "0x1": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-  "0x89": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
-  "0xa": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-  "0xa4b1": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
-};
 
 /**
  *
@@ -72,11 +66,7 @@ export async function getQuote({
 
     if (Number(poolAddress).toString() === "0") {
       // there is no such pool for provided In-Out tokens.
-      console.warn(
-        `Error: No pool ${fromToken.symbol}-${toToken?.symbol} with fee: ${
-          feeMapping[i.toString()]
-        }`
-      );
+
       continue;
     }
 
@@ -114,16 +104,6 @@ export async function getQuote({
       state.tick
     );
 
-    console.log(
-      `1 ${pool.token0.symbol} = ${pool.token0Price.toSignificant()} ${
-        pool.token1.symbol
-      }`
-    );
-    console.log(
-      `1 ${pool.token1.symbol} = ${pool.token1Price.toSignificant()} ${
-        pool.token0.symbol
-      }`
-    );
     result.push({
       formattedUsdcValue: pool.token1Price.toSignificant(),
       feeAmount: feeMapping[i.toString()],
