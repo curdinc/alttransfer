@@ -255,7 +255,8 @@ export class AltTransferCrossChainSdk {
             }
           })
         );
-        return tokens;
+        return getTokens(address, chainId);
+
       }
     } catch (e) {
       console.log("error", e);

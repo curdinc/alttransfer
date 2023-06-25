@@ -1,9 +1,9 @@
 'use client';
 
 import Button from '@/components/ui/Button';
-import { Database } from '@/types_db';
+import type { Database } from '@/types_db';
 import { AltTransferCrossChainPaymentModal } from '@alttransfer/cross-chain-payment-react-sdk';
-import { Session, User } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 import cn from 'classnames';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -46,7 +46,7 @@ export default function Pricing({
 
   const dummyProducts = [
     {
-      prices: '0.25',
+      prices: '0.10',
       id: 'Hobby',
       name: 'Hobby',
       description: 'All the basics for starting a new hobby'
