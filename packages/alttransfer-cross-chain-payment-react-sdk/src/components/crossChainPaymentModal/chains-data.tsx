@@ -1,20 +1,31 @@
 import { Circle } from "lucide-react";
 import {
   Arbitrum,
-  Avalanche,
   Ethereum,
-  Fantom,
   Optimism,
   Polygon,
 } from "../../assets/icons-chains";
 
 export type chainsDataType = keyof typeof chainsData;
+
+export const chainsID = new Map<string, string>([
+  ["Polygon", "0x89"],
+  ["Ethereum", "0x1"],
+  ["Arbitrum One", "0xa4b1"],
+  ["Optimism", "0xa"]]
+)
+
+export const chainHex = new Set<string>([
+  "89",
+  "1",
+  "a4b1",
+  "a"]
+)
+
 export const chainsData = {
   Polygon: <Polygon />,
-  Avalanche: <Avalanche />,
-  Arbitrum: <Arbitrum />,
+  "Arbitrum One": <Arbitrum />,
   Optimism: <Optimism />,
-  Fantom: <Fantom />,
-  Etherium: <Ethereum />,
+  Ethereum: <Ethereum />,
   Chain: <Circle />
 };

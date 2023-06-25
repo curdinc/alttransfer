@@ -19,6 +19,9 @@
   --ck-brand-metamask-10: #e4751f;
   --ck-brand-metamask-11: #fef5e7;
   --ck-brand-metamask-12: #e3c8ab;
+  --ck-chain-ethereum-01: #25292E;
+  --ck-chain-ethereum-02: #fff;
+  --ck-chain-ethereum-03: #DFE0E0;
 
   --primary: rgba(96, 47, 230, 0.9);
   --primary-hover: rgb(115, 59, 255);
@@ -49,7 +52,8 @@ input {
   all: unset;
 }
 
-p, div {
+p,
+div {
   color: var(--secondary-text);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -63,11 +67,9 @@ p, div {
 
 .DialogContent {
   background: rgb(43, 46, 60);
-  background: linear-gradient(
-    151deg,
-    rgba(43, 46, 60, 1) 8%,
-    rgba(17, 19, 28, 1) 97%
-  );
+  background: linear-gradient(151deg,
+      rgba(43, 46, 60, 1) 8%,
+      rgba(17, 19, 28, 1) 97%);
   border-radius: 1em;
   border: 1px solid var(--border-emphasis);
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
@@ -83,11 +85,12 @@ p, div {
   padding: 2em 1.75em 2em;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .DialogContent:focus {
   outline: none;
 }
 
-.DialogContent > * {
+.DialogContent>* {
   margin-bottom: 1em;
 }
 
@@ -133,13 +136,12 @@ p, div {
   margin-top: 1em;
   transition: background-color 0.3s ease-in-out;
   background: var(--primary-shadow);
-  background: linear-gradient(
-    0deg,
-    var(--primary-shadow) 3%,
-    var(--primary) 93%
-  );
+  background: linear-gradient(0deg,
+      var(--primary-shadow) 3%,
+      var(--primary) 93%);
   color: var(--primary-text);
 }
+
 .Button:hover {
   background-color: var(--primary-hover);
 }
@@ -158,6 +160,7 @@ p, div {
   justify-content: center;
   color: var(--primary-text);
 }
+
 .IconButton:hover {
   background-color: var(--border-emphasis);
 }
@@ -200,6 +203,7 @@ p, div {
   transition: box-shadow 0.15s ease-in-out;
   height: 35px;
 }
+
 .Input:focus {
   box-shadow: 0 0 0 1.5px var(--border-emphasis);
 }
@@ -226,6 +230,7 @@ p, div {
   transition: background-color 0.175s ease-in-out;
   background-color: var(--secondary);
 }
+
 .HomepageSelectButton:hover:not([disabled]),
 .HomepageSelectButton:active:not([disabled]) {
   background-color: var(--secondary-hover);
@@ -259,6 +264,7 @@ p, div {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -269,6 +275,7 @@ p, div {
     opacity: 0;
     transform: translate(-50%, -48%) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -283,6 +290,7 @@ p, div {
   width: 80px;
   height: 80px;
 }
+
 .lds-ring div {
   box-sizing: border-box;
   display: block;
@@ -295,19 +303,24 @@ p, div {
   animation: lds-ring 1.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: var(--primary) transparent transparent transparent;
 }
+
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
 }
+
 .lds-ring div:nth-child(2) {
   animation-delay: -0.3s;
 }
+
 .lds-ring div:nth-child(3) {
   animation-delay: -0.15s;
 }
+
 @keyframes lds-ring {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -324,9 +337,11 @@ p, div {
 .ProfileLinks.gray:active {
   color: var(--secondary-text);
 }
+
 .ProfileLinks.blue {
   color: var(--tertiary-link);
 }
+
 .ProfileLinks.blue:active {
   color: var(--tertiary-link-active);
 }
