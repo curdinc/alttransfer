@@ -75,11 +75,7 @@ const PaymentModal: React.FC<modalProps> = (props) => {
       case pages.SelectChain:
         return <SelectChain setCurrentScreen={setCurrentScreen} />;
       case pages.ConfirmPayment:
-        return (
-          <ConfirmPayment
-            setCurrentScreen={setCurrentScreen}
-          />
-        );
+        return <ConfirmPayment setCurrentScreen={setCurrentScreen} />;
       case pages.SubmittedPayment:
         return <SubmittedPayment setCurrentScreen={setCurrentScreen} />;
       case pages.Profile:
