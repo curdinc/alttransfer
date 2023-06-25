@@ -1,5 +1,5 @@
 import React from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { RightIconButton } from "../../assets/iconButtons";
 import { useDestinationInfo } from "../../hooks/useDestinationInfo";
 import { getCurrencyToBePaid } from "../../units/blockchain";
@@ -15,15 +15,17 @@ export default function HomePage({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { isConnected } = useAccount();
-  const { currentChain, currency, sdk } = useCrossChainPayment();
-
+  const { chain } = useNetwork();
+  const { currentChain, setCurrentChain, currency, sdk } = useCrossChainPayment();
+  
   const onClick = () => {
     if (!isConnected) setCurrentScreen(pages.ModifyWallet);
-    if (!currency.address) setCurrentScreen(pages.SelectToken);
+    else if (!currency.address) setCurrentScreen(pages.SelectToken);
     else {
       setCurrentScreen(pages.ConfirmPayment);
     }
   };
+
 
   const { isLoadingDestinationInfo, destinationInfo, destinationError } =
     useDestinationInfo();

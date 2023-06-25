@@ -6,7 +6,7 @@ import { createContext, useContext, useState } from "react";
 import type { AltTransferCrossChainPaymentModalProps } from "./CrossChainPaymentModal";
 import { ChainsDataType } from "./crossChainPaymentModal/chains-data";
 
-const defaultCurrency: TokenInfo = {
+export const defaultCurrency: TokenInfo = {
   address: "",
   chainId: "0x89",
   decimals: 0,
@@ -52,7 +52,7 @@ const CrossChainContext = createContext<{
   }),
   currency: defaultCurrency,
   setCurrency: () => {},
-  currentChain: "Chain",
+  currentChain: "Ethereum",
   setCurrentChain: () => {},
 });
 export function CrossChainPaymentProvider({

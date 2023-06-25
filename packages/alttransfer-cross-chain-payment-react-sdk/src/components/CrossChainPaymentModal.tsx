@@ -63,20 +63,6 @@ interface modalProps {
 
 const PaymentModal: React.FC<modalProps> = (props) => {
   const [currentScreen, setCurrentScreen] = React.useState(pages.HomeScreen);
-  const [costInfo, setCostInfo] = React.useState({});
-
-  React.useEffect(() => {
-    // Replace this
-    const randomCostInfo = {
-      curToken: "BTC",
-      curCostInToken: "0.353",
-      curCostInUSDC: "6339.2",
-      rate: "-0.5%",
-      bal: "0",
-      cost: "123",
-    };
-    setCostInfo(randomCostInfo);
-  }, []);
 
   const renderPage = () => {
     switch (currentScreen) {
@@ -92,7 +78,6 @@ const PaymentModal: React.FC<modalProps> = (props) => {
         return (
           <ConfirmPayment
             setCurrentScreen={setCurrentScreen}
-            costInfo={costInfo}
           />
         );
       case pages.SubmittedPayment:
