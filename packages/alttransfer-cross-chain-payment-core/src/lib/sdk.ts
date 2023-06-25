@@ -1,5 +1,10 @@
 import { ethers } from "ethers";
 import type { WalletClient } from "viem";
+import {
+  getTokenMetadata,
+  getUserTokenBalance,
+} from "../services/alchemy/getUserTokenBalance";
+import { getQuote } from "../services/uniswap/getQuote";
 import type { SupportedChainIds } from "../types/SupportedChainIds";
 import type { TokenInfo } from "../types/TokenInfo";
 
@@ -21,6 +26,7 @@ export type AltTransferCrossChainSdkConstructorArgs = {
 
   config: {
     ChainAPIs: Record<SupportedChainIds, string>;
+    alchemyApiKey: string;
   };
 };
 
@@ -78,26 +84,215 @@ export class AltTransferCrossChainSdk {
     address: string;
   }) {
     // todo: call Quicknode or alchemy api to get user token list
-    const provider = new ethers.providers.JsonRpcProvider(
-      this.config.ChainAPIs[chainId]
-    );
-    const tokens = await provider.send("qn_getWalletTokenBalance", [
-      { wallet: address },
-    ]);
-    const token_list = tokens.result;
-    const usable_tokens: Array<TokenInfo> = token_list.map((token: any) => ({
-      address: token.address,
-      decimals: token.decimals,
-      name: token.name,
-      symbol: token.symbol,
-      balance: token.totalBalance,
-      chainId: chainId,
-      tokenUri: "",
-      balanceUsdValueCents: "",
-      tokenExchangeUsdValueCents: "",
-    }));
-    // todo: contrast this list with those that has liquidity on the right liquidity pool base on the current chain
-    return usable_tokens;
+    let tokens: TokenInfo[] = [];
+
+    if (chainId === "0xa" || chainId === "0xa4b1") {
+      const tokenList = await getUserTokenBalance(
+        chainId,
+        address,
+        this.config.alchemyApiKey
+      );
+
+      tokens = (await Promise.all(
+        tokenList
+          .filter((token) => !!token.logo)
+          .map(async (token) => {
+            if (
+              token.tokenBalance === "0" ||
+              !token.decimals ||
+              !token.name ||
+              !token.symbol
+            ) {
+              console.log("missing token info");
+              return;
+            }
+
+            const result = {
+              address: token.contractAddress,
+              decimals: token.decimals ?? 18,
+              name: token.name ?? "",
+              symbol: token.symbol ?? "",
+              balance: token.tokenBalance ?? "0",
+              chainId: chainId,
+              tokenUri: token.logo ?? undefined,
+              balanceUsdValueCents: "",
+              tokenExchangeUsdValueCents: "",
+            };
+
+            const quote = await getQuote({
+              fromToken: result,
+              hexChainId: chainId,
+              userAddress: address,
+              alchemyApiKey: this.config.alchemyApiKey,
+            });
+
+            console.log("quote", quote);
+            if (!quote) return;
+
+            let tokenExchangeUsdValueCents = "0";
+            try {
+              tokenExchangeUsdValueCents = ethers.utils
+                .parseUnits(quote.formattedUsdcValue, 6)
+                .mul(100)
+                .toString()
+                .split(".")[0];
+              console.log(
+                "tokenExchangeUsdValueCents",
+                tokenExchangeUsdValueCents
+              );
+
+              const usdValueBigNumber = ethers.utils.parseUnits(
+                quote.formattedUsdcValue,
+                6
+              );
+              const balanceUsdValueCents = ethers.utils.formatUnits(
+                usdValueBigNumber
+                  .mul(ethers.BigNumber.from(token.tokenBalance))
+                  .div(ethers.utils.parseUnits("1", token.decimals)),
+                6
+              );
+              console.log("balanceUsdValueCents", balanceUsdValueCents);
+              return {
+                ...result,
+                balanceUsdValueCents,
+                tokenExchangeUsdValueCents,
+              };
+            } catch (e) {
+              console.log("error", e);
+              const usdValueBigNumber = ethers.utils.parseUnits(
+                quote.formattedUsdcValue,
+                18
+              );
+              const balanceUsdValueCents = ethers.utils.formatUnits(
+                usdValueBigNumber
+                  .mul(ethers.BigNumber.from(token.tokenBalance))
+                  .div(ethers.utils.parseUnits("1", token.decimals)),
+                18
+              );
+              console.log("balanceUsdValueCents", balanceUsdValueCents);
+              return {
+                ...result,
+                balanceUsdValueCents: balanceUsdValueCents,
+                tokenExchangeUsdValueCents: "0",
+              };
+            }
+            return result;
+          })
+      )) as any;
+    } else {
+      const provider = new ethers.providers.JsonRpcProvider(
+        this.config.ChainAPIs[chainId]
+      );
+      const tokenList = await provider.send("qn_getWalletTokenBalance", [
+        { wallet: address },
+      ]);
+      console.log("tokenList", tokenList);
+
+      tokens = await Promise.all(
+        tokenList.result.map(async (token: any) => {
+          if (
+            token.totalBalance === "0" ||
+            !token.decimals ||
+            !token.name ||
+            !token.symbol
+          ) {
+            console.log("missing token info");
+            return;
+          }
+
+          const metadata = await getTokenMetadata(
+            token.address,
+            chainId,
+            this.config.alchemyApiKey
+          );
+          if (!metadata.logo) {
+            console.log("missing logo");
+            return;
+          }
+
+          const quote = await getQuote({
+            fromToken: {
+              address: token.address,
+              decimals: parseInt(token.decimals),
+              name: token.name,
+              symbol: token.symbol,
+              balance: token.totalBalance,
+              chainId,
+              tokenUri: metadata.logo,
+              balanceUsdValueCents: "",
+              tokenExchangeUsdValueCents: "",
+            },
+            hexChainId: chainId,
+            userAddress: address,
+            alchemyApiKey: this.config.alchemyApiKey,
+          });
+          console.log("quote", quote);
+          if (!quote || !quote.formattedUsdcValue) return;
+
+          let tokenExchangeUsdValueCents = "0";
+          try {
+            tokenExchangeUsdValueCents = ethers.utils
+              .parseUnits(quote.formattedUsdcValue, 6)
+              .mul(100)
+              .toString()
+              .split(".")[0];
+            console.log(
+              "tokenExchangeUsdValueCents",
+              tokenExchangeUsdValueCents
+            );
+
+            const usdValueBigNumber = ethers.utils.parseUnits(
+              quote.formattedUsdcValue,
+              6
+            );
+            const balanceUsdValueCents = ethers.utils.formatUnits(
+              usdValueBigNumber
+                .mul(ethers.BigNumber.from(token.totalBalance))
+                .div(ethers.utils.parseUnits("1", token.decimals)),
+              6
+            );
+            console.log("balanceUsdValueCents", balanceUsdValueCents);
+            return {
+              address: token.address,
+              decimals: parseInt(token.decimals),
+              name: token.name,
+              symbol: token.symbol,
+              balance: token.totalBalance,
+              chainId,
+              tokenUri: metadata.logo,
+              balanceUsdValueCents,
+              tokenExchangeUsdValueCents,
+            };
+          } catch (e) {
+            console.log("error", e);
+            const usdValueBigNumber = ethers.utils.parseUnits(
+              quote.formattedUsdcValue,
+              20
+            );
+            const balanceUsdValueCents = ethers.utils.formatUnits(
+              usdValueBigNumber
+                .mul(ethers.BigNumber.from(token.totalBalance))
+                .div(ethers.utils.parseUnits("1", token.decimals)),
+              18
+            );
+            console.log("balanceUsdValueCents", balanceUsdValueCents);
+            return {
+              address: token.address,
+              decimals: parseInt(token.decimals),
+              name: token.name,
+              symbol: token.symbol,
+              balance: token.totalBalance,
+              chainId,
+              tokenUri: metadata.logo,
+              balanceUsdValueCents,
+              tokenExchangeUsdValueCents: "0",
+            };
+          }
+        })
+      );
+    }
+
+    return tokens.filter((token) => !!token);
   }
 
   /**
