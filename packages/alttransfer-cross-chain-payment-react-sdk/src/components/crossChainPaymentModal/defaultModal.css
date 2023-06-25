@@ -158,6 +158,11 @@ p, div {
   font-size: 1em;
 }
 
+.tertiaryText {
+  font-size: 0.95em;
+  color: var(--tertiary-text);
+}
+
 /* TOKEN SELECT */
 .Fieldset {
   display: flex;

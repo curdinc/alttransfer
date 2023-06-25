@@ -16,6 +16,6 @@
   "tailwindCSS.experimental.configFile": "./packages/config/tailwind/index.ts",
   "prettier.prettierPath": "./node_modules/prettier",
   "[typescriptreact]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }

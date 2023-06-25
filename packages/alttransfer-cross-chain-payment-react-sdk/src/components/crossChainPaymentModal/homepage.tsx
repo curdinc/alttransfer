@@ -5,9 +5,8 @@ import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
+import { CrossIconButton, RightIconButton } from "../../assets/iconButtons";
 import "./defaultmodal.css";
-import { CrossIconButton, RightIconButton } from "./iconButtons";
-
 
 export default function HomePage({
   setCurrentScreen,
@@ -18,7 +17,7 @@ export default function HomePage({
   curChain: string;
   costInfo: constInfoType;
 }) {
-  // REPLACE THIS
+
   const { isConnected } = useAccount();
 
   return (
@@ -37,15 +36,13 @@ export default function HomePage({
       {/* SECOND SECTION -> token / chain / cost */}
       {/* check IF WALLET IS CONNECTED */}
       <div className={`SectionContainer`}>
-        <div
-          className="splitText"
-        >
+        <div className="splitText" >
           <button
             className="HomepageSelectButton"
             onClick={() => {
               setCurrentScreen(pages.SelectToken);
             }}
-            style={{ opacity: isConnected ? "1" : "0.75" }}
+            style={{ opacity: isConnected ? "1" : "0.35" }}
             disabled={isConnected ? false : true}
           >
             token
@@ -55,7 +52,7 @@ export default function HomePage({
             onClick={() => {
               setCurrentScreen(pages.SelectChain);
             }}
-            style={{ opacity: isConnected ? "1" : "0.75" }}
+            style={{ opacity: isConnected ? "1" : "0.35" }}
             disabled={isConnected ? false : true}
           >
             {chainsData[curChain as chainsDataType]}
@@ -70,29 +67,30 @@ export default function HomePage({
             alignItems: "flex-end",
           }}
         >
-          <div
+          {/* THESE COMMENTS ARE TO ADD price and unit */}
+          {/* <div
             style={{
               display: "inline-flex",
               alignItems: "flex-end",
               gap: "0.5em",
             }}
-          >
-            <div style={{ color: "var(--primary-text)", fontSize: "1.75em" }}>
-              {costInfo.curCostInToken}
-            </div>
-            <div style={{ color: "var(--tertiary-text)" }}>
-              ≈${costInfo.curCostInUSDC + " (" + costInfo.rate + ")"}
-            </div>
+          > */}
+          <div style={{ color: "var(--primary-text)", fontSize: "1.75em" }}>
+            {costInfo.curCostInToken}
           </div>
-          <div style={{ color: "var(--tertiary-text)" }}>Balance: {costInfo.bal}</div>
+          {/* <div style={{ color: "var(--tertiary-text)" }}>
+              ≈${costInfo.curCostInUSDC + " (" + costInfo.rate + ")"}
+            </div> */}
+          {/* </div> */}
+          <div style={{ color: "var(--tertiary-text)" }}>{isConnected ? `Balance: ${costInfo.bal}` : ""}</div>
         </div>
       </div>
 
       <div className="SectionContainer">
-          <div className="splitText">
-            Cost
-            <div>${costInfo.cost+" "+"USD"}</div>
-          </div>
+        <div className="splitText">
+          Cost
+          <div>${costInfo.cost + " " + "USD"}</div>
+        </div>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center" }}>

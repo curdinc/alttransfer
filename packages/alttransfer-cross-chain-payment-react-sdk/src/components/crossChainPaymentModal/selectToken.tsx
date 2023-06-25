@@ -3,7 +3,7 @@ import React from "react";
 import { useUserCurrencies } from "../../hooks/useUserToken";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
-import { CrossIconButton, LeftIconButton } from "./iconButtons";
+import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 
 export default function SelectToken({
   setCurrentScreen,

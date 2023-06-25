@@ -2,9 +2,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Circle } from "lucide-react";
 import { useConnect } from "wagmi";
 import { Coinbase, MetaMask, WalletConnect } from "../../assets/icons-wallets";
+import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
-import { CrossIconButton, LeftIconButton } from "./iconButtons";
+
 
 let randomShit = new Map<string, JSX.Element>([
   ["MetaMask", <MetaMask />],
@@ -34,7 +35,7 @@ export default function ModifyWallet({
           <LeftIconButton />
         </button>
         <Dialog.Title className="DialogTitle">
-          Select a paying wallet
+          Select a wallet
         </Dialog.Title>
         <Dialog.Close asChild>
           <button className="IconButton" aria-label="Close">
