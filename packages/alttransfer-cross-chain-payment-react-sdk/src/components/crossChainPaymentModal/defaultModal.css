@@ -57,8 +57,7 @@ input {
   all: unset;
 }
 
-p,
-div {
+p, div {
   color: var(--secondary-text);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -87,7 +86,6 @@ div {
   transform: translate(-50%, -50%);
   width: 70vw;
   max-width: 400px;
-  height: 40vh;
   max-height: 85vh;
   min-height: 340px;
   padding: 2em 1.75em 2em;
@@ -142,7 +140,7 @@ div {
   height: 32px;
   margin-top: 1em;
   transition: background-color 0.3s ease-in-out;
-  box-shadow: 0.5em 0.1em 1em var(--primary-shadow);
+  box-shadow:  0.5em 0.1em  1em var(--primary-shadow);
   background-color: var(--primary);
   /* background: var(--primary-shadow);
   background: linear-gradient(
@@ -223,8 +221,7 @@ div {
   border-radius: 1em;
   padding: 1em 1em;
   gap: 1em;
-  box-shadow: 0 0 0 1px var(--border-emphasis),
-    0em 0em 0.4em var(--primary-shadow);
+  box-shadow: 0 0 0 1px var(--border-emphasis), 0em 0em  0.4em var(--primary-shadow);
   box-sizing: border-box;
   background-color: var(--background-secondary);
 }
@@ -306,6 +303,7 @@ div {
   color: var(--tertiary-link-active);
 }
 
+
 /* CIRCLE INTO CHECKMARK */
 .checkmark-wrapper {
   width: var(--check-size);
@@ -364,49 +362,49 @@ div {
 
 @keyframes checkmark {
   0% {
-    height: 0;
-    width: 0;
-    opacity: 0;
-  }
-  80% {
-    height: 0;
-    width: 0;
-    opacity: 0;
-  }
-  90% {
-    height: var(--checkmark-height);
-    width: 0;
-    opacity: 1;
-  }
-  100% {
-    height: var(--checkmark-height);
-    width: var(--checkmark-width);
-    opacity: 1;
-  }
+      height: 0;
+      width: 0;
+      opacity: 0;
+    }
+    80% {
+      height: 0;
+      width: 0;
+      opacity: 0;  
+    }
+    90% {
+      height: var(--checkmark-height);
+      width: 0;
+      opacity: 1;
+    }
+    100% {
+      height: var(--checkmark-height);
+      width: var(--checkmark-width);
+      opacity: 1;
+    }
 }
 
 @keyframes circle {
   0% {
-    border-color: transparent;
-    border-left-color: var(--primary);
+      border-color: transparent;
+      border-left-color: var(--primary);
   }
   90% {
-    transform: rotate(360deg);
-    border-color: transparent;
-    border-left-color: var(--primary);
+      transform: rotate(360deg);
+      border-color: transparent;
+      border-left-color: var(--primary);
   }
   100% {
-    transform: rotate(360deg);
-    border-color: var(--primary);
+      transform: rotate(360deg);
+      border-color: var(--primary);
   }
 }
 
 @keyframes spinner {
   0% {
-    border-color: transparent;
-    border-left-color: var(--primary);
+      border-color: transparent;
+      border-left-color: var(--primary);
   }
   100% {
-    transform: rotate(360deg);
+      transform: rotate(360deg);
   }
 }
