@@ -1,11 +1,11 @@
+import { ADDRESS_SCANNER_URLS, LifiSwapDataReturnType, SupportedChainIds, SupportedChainIdsSchema, TXN_SCANNER_URLS, getSwaps } from "@alttransfer/cross-chain-payment-core";
 import { CopyIcon, ExternalLink } from "lucide-react";
-import React from "react";
-import { useAccount } from "wagmi";
+import React, { useEffect } from "react";
+import { useAccount, useDisconnect, useNetwork } from "wagmi";
 import { formatEvmAddress } from "../../units/blockchain";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
 import { wallets } from "./modifyWallet";
-import { useDisconnect } from 'wagmi'
 
 export default function Profile({
   setCurrentScreen,
@@ -13,7 +13,10 @@ export default function Profile({
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
   const { connector: activeConnector, address } = useAccount();
+  const { chain, chains } = useNetwork()
   const { disconnect } = useDisconnect()
+  const [data, setData] = React.useState<LifiSwapDataReturnType>([]);
+  const [chainId, setChainId] = React.useState<SupportedChainIds>("0x1");
   const size = "1.5em";
   const ExternalLinkIcon = () => {
     return <ExternalLink width={size} height={size} strokeWidth={2} />;
@@ -21,6 +24,20 @@ export default function Profile({
   const CopyLinkIcon = () => {
     return <CopyIcon width={size} height={size} strokeWidth={2} />;
   };
+  
+  useEffect(() => { 
+       if(chain != null) {
+        const chainIdParsed = SupportedChainIdsSchema.safeParse(`0x${chain.id.toString(16)}`);
+        if(chainIdParsed.success) {
+          setChainId(chainIdParsed.data);
+          if(address != null) {
+              getSwaps(address, chainId).then((res) => {
+                setData(res);
+              })
+         }
+        }
+    }
+  }, [chain, address]);
 
   return (
     <>
@@ -37,6 +54,7 @@ export default function Profile({
               flexDirection: "column",
               gap: "1em",
               width: "100%",
+              height: "100%"
             }}
           >
             <div className="splitText">
@@ -60,7 +78,7 @@ export default function Profile({
               <a
                 className="ProfileLinks blue"
                 onClick={() => {
-                  window.open(`https://etherscan.io/address/${address}`);
+                  window.open(`${ADDRESS_SCANNER_URLS[chainId] + address}`);
                 }}
               >
                 View on explore <ExternalLinkIcon />
@@ -73,6 +91,26 @@ export default function Profile({
               >
                 Copy address <CopyLinkIcon />
               </a>
+            </div>
+            <div className="overflow-auto h-32">
+              <table className="table">
+                <thead>
+                  <tr className="flex justify-between  w-[320px] mb-2">
+                    <th>Transaction Hash</th>
+                    <th>Time stamp</th>
+                  </tr>
+                </thead>
+                <tbody className="space-y-2">
+                  {[...data, ...data].map((item, index) => {
+                    return (
+                      <tr key={index} className="flex justify-between  w-[320px]">
+                        <td><a className="hover:underline" target="_blank" href={TXN_SCANNER_URLS[chainId] + item.transactionHash}>{formatEvmAddress(item.transactionHash)}</a></td>
+                        <td>{(new Date(parseInt(item.timestamp) * 1000)).toDateString()}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         ) : (
