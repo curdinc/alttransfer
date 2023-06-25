@@ -65,6 +65,7 @@ export function CrossChainPaymentProvider({
   getItemPrice,
   getRecipientAddress,
   text,
+  optimisticSettlement,
 }: AltTransferCrossChainPaymentModalProps) {
   const [currency, setCurrency] = useState<TokenInfo>(defaultCurrency);
   const [currentChain, setCurrentChain] = useState<ChainsDataType>("Chain");
@@ -86,6 +87,7 @@ export function CrossChainPaymentProvider({
     getItemPrice,
     getRecipientAddress,
     text,
+    optimisticSettlement,
   });
   return (
     <CrossChainContext.Provider

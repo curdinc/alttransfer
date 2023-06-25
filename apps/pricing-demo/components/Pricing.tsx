@@ -46,19 +46,19 @@ export default function Pricing({
 
   const dummyProducts = [
     {
-      prices: '12',
+      prices: '0.25',
       id: 'Hobby',
       name: 'Hobby',
       description: 'All the basics for starting a new hobby'
     },
     {
-      prices: '24',
+      prices: '0.5',
       id: 'Freelancer',
       name: 'Freelancer',
       description: 'All the basics for starting a new business'
     },
     {
-      prices: '48',
+      prices: '0.6',
       id: 'Startup',
       name: 'Startup',
       description: 'All the basics for starting a new business'
@@ -116,7 +116,7 @@ export default function Pricing({
             if (!price) return null;
             const priceString = new Intl.NumberFormat('en-US', {
               style: 'currency',
-              currency: 'CAD',
+              currency: 'USD',
               minimumFractionDigits: 0
             }).format((1200 || 0) / 100);
             return (
@@ -138,7 +138,7 @@ export default function Pricing({
                   <p className="mt-4 text-zinc-300">{product.description}</p>
                   <p className="mt-8">
                     <span className="text-5xl font-extrabold white">
-                      {`CA$${product.prices}`}
+                      {`$${product.prices}`}
                     </span>
                     <span className="text-base font-medium text-zinc-100">
                       /{billingInterval}
@@ -157,10 +157,11 @@ export default function Pricing({
                     }}
                     getItemPrice={async () => {
                       return Promise.resolve({
-                        amount: '100000000000000',
+                        amount: (parseFloat(product.prices) * 10e5).toString(),
                         chainId: '0xa',
-                        isNative: true
-                        // tokenAddress: "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+                        isNative: false,
+                        tokenAddress:
+                          '0x7f5c764cbc14f9669b88837ca1490cca17c31607'
                       });
                     }}
                     getRecipientAddress={async () => {
@@ -171,6 +172,7 @@ export default function Pricing({
                     text={{
                       brandName: 'Supa Hosting'
                     }}
+                    optimisticSettlement={true}
                   >
                     <Button
                       variant="slim"

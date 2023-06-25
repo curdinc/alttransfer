@@ -1,4 +1,3 @@
-import { LiFi } from "@lifi/sdk";
 import { ethers } from "ethers";
 import { formatUnits, Transport, WalletClient, zeroAddress } from "viem";
 import { Chain } from "viem/chains";
@@ -40,14 +39,15 @@ export type AltTransferCrossChainSdkConstructorArgs = {
     ChainAPIs: Record<"0x1" | "0x89", string>;
     alchemyApiKey: string;
   };
+  optimisticSettlement?: boolean;
 };
 
 export class AltTransferCrossChainSdk {
   private getItemPrice: AltTransferCrossChainSdkConstructorArgs["getItemPrice"];
   private getRecipientAddress: AltTransferCrossChainSdkConstructorArgs["getRecipientAddress"];
   private config: AltTransferCrossChainSdkConstructorArgs["config"];
+  private optimisticSettlement: boolean;
   text: AltTransferCrossChainSdkConstructorArgs["text"];
-  private LiFi: LiFi;
   /**
    * @example
    * const sdk = AltTransferCrossChainPaymentSdk({
@@ -75,9 +75,7 @@ export class AltTransferCrossChainSdk {
    * @param {AltTransferCrossChainSdkConstructorArgs["config"]} args.config - Miscellaneous configuration options.
    */
   constructor(args: AltTransferCrossChainSdkConstructorArgs) {
-    this.LiFi = new LiFi({
-      integrator: "",
-    });
+    this.optimisticSettlement = args.optimisticSettlement ?? false;
     this.text = args.text;
     this.config = args.config;
     this.getItemPrice = args.getItemPrice;
@@ -291,13 +289,11 @@ export class AltTransferCrossChainSdk {
   async pay({
     currency,
     payingAmount,
-    optimisticSettlement,
     walletClient,
   }: {
     walletClient: WalletClient<Transport, Chain>;
     payingAmount: string;
     currency: TokenInfo;
-    optimisticSettlement: boolean;
   }) {
     const signer = walletClientToSigner(walletClient);
 
@@ -311,6 +307,6 @@ export class AltTransferCrossChainSdk {
       toToken,
       hexChainId: currency.chainId,
     });
-    return await executeRoute(quote, signer, optimisticSettlement);
+    return await executeRoute(quote, signer, this.optimisticSettlement);
   }
 }

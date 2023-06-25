@@ -49,6 +49,7 @@ export function AltTransferCrossChainPaymentModal(
         getItemPrice={props.getItemPrice}
         getRecipientAddress={props.getRecipientAddress}
         text={props.text}
+        optimisticSettlement={props.optimisticSettlement ?? false}
       >
         <PaymentModal transferAmount="123">{props.children}</PaymentModal>
       </CrossChainPaymentProvider>

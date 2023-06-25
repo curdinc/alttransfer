@@ -103,7 +103,6 @@ export default function ConfirmPayment({
                 sdk
                   .pay({
                     currency,
-                    optimisticSettlement: false,
                     payingAmount: parseUnits(
                       balanceToBePaid,
                       currency.decimals
