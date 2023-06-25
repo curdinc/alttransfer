@@ -6,8 +6,12 @@ export type TokenInfo = {
   name: string;
   symbol: string;
   balance: string;
+  formattedBalance: string;
   tokenUri?: string;
   chainId: SupportedChainIds;
   balanceUsdValueCents: string;
   tokenExchangeUsdValueCents: string;
+  uniSwapInfo?: {
+    feeAmount: number;
+  };
 };
