@@ -3,7 +3,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
-import "./defaultmodal.css";
+import "./defaultModal.css";
+import NavBar from "../navBar";
 export default function ConfirmPayment({
   setCurrentScreen,
   currentChain,
@@ -23,21 +24,7 @@ export default function ConfirmPayment({
 
   return (
     <>
-      <div className="DialogHeading">
-        <button
-          className="IconButton"
-          aria-label="Back"
-          onClick={() => { setCurrentScreen(pages.HomeScreen); }}
-        >
-          <LeftIconButton />
-        </button>
-        <Dialog.Title className="DialogTitle">Confirm payment</Dialog.Title>
-        <Dialog.Close asChild>
-          <button className="IconButton" aria-label="Close">
-            <CrossIconButton />
-          </button>
-        </Dialog.Close>
-      </div>
+      <NavBar title="Confirm payment" setCurrentScreen={setCurrentScreen} backLink={pages.HomeScreen} />
       {
         !isLoading && !doneLoading && (
           <>

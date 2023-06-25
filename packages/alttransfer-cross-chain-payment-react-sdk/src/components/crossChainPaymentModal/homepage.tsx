@@ -6,16 +6,20 @@ import { pages } from "../CrossChainPaymentModal";
 import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
 import { CrossIconButton, RightIconButton } from "../../assets/iconButtons";
-import "./defaultmodal.css";
+import "./defaultModal.css";
+import NavBar from "../navBar";
+import { UserCircle } from "lucide-react";
 
 export default function HomePage({
   setCurrentScreen,
   curChain,
-  costInfo
+  costInfo,
+  brandName
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
   curChain: string;
   costInfo: constInfoType;
+  brandName: string;
 }) {
 
   const { isConnected } = useAccount();
@@ -23,18 +27,9 @@ export default function HomePage({
   return (
     <>
       {/* FIRST ROW -> TITLE + CLOSE BUTTON */}
-      <div className="DialogHeading">
-        <div className="IconButton" style={{ opacity: 0 }} />
-        <Dialog.Title className="DialogTitle">Skylar Pays</Dialog.Title>
-        <Dialog.Close asChild>
-          <button className="IconButton" aria-label="Close">
-            <CrossIconButton />
-          </button>
-        </Dialog.Close>
-      </div>
+      <NavBar title={brandName} setCurrentScreen={setCurrentScreen} />
 
       {/* SECOND SECTION -> token / chain / cost */}
-      {/* check IF WALLET IS CONNECTED */}
       <div className={`SectionContainer`}>
         <div className="splitText" >
           <button
@@ -75,7 +70,7 @@ export default function HomePage({
               gap: "0.5em",
             }}
           > */}
-          <div style={{ color: "var(--primary-text)", fontSize: "1.75em" }}>
+          <div className="largeText">
             {costInfo.curCostInToken}
           </div>
           {/* <div style={{ color: "var(--tertiary-text)" }}>
