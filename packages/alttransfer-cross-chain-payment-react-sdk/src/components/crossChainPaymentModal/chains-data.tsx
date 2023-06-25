@@ -21,5 +21,4 @@ export const chainsData = {
   "Arbitrum One": <Arbitrum className="rounded-full h-6 w-6" />,
   Optimism: <Optimism className="rounded-full h-6 w-6" />,
   Ethereum: <Ethereum className="rounded-full h-6 w-6" />,
-  Chain: <Circle className="rounded-full h-6 w-6" />,
 };

@@ -52,7 +52,7 @@ const CrossChainContext = createContext<{
   }),
   currency: defaultCurrency,
   setCurrency: () => {},
-  currentChain: "Chain",
+  currentChain: "Ethereum",
   setCurrentChain: () => {},
 });
 export function CrossChainPaymentProvider({
@@ -63,7 +63,7 @@ export function CrossChainPaymentProvider({
   text,
 }: AltTransferCrossChainPaymentModalProps) {
   const [currency, setCurrency] = useState<TokenInfo>(defaultCurrency);
-  const [currentChain, setCurrentChain] = useState<ChainsDataType>("Chain");
+  const [currentChain, setCurrentChain] = useState<ChainsDataType>("Ethereum");
 
   const sdk = new AltTransferCrossChainSdk({
     config,
