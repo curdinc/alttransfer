@@ -24,7 +24,6 @@ export async function getSwaps(
     body: JSON.stringify(query),
   });
 
-  //console.log("data.json()", await data.json());
   const parsedData = LifiSwapDataReturnSchema.parse(
     (await data.json()).data.liFiTransfers
   );
