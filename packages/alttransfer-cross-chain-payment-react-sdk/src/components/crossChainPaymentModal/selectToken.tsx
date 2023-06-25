@@ -11,18 +11,14 @@ export default function SelectToken({
 }) {
   const { currencies, currenciesError, isLoadingCurrencies } =
     useUserCurrencies();
-  console.log("currencies", currencies);
   const [currencySearch, setCurrencySearch] = useState("");
-  const [filteredCurrencies, setFilteredCurrencies] = useState([
-    ...currencies,
-    ...currencies,
-  ]);
+  const [filteredCurrencies, setFilteredCurrencies] = useState(currencies);
 
-  const { currency, setCurrency } = useCrossChainPayment();
+  const { setCurrency } = useCrossChainPayment();
 
   React.useEffect(() => {
     if (currencySearch === "") {
-      setFilteredCurrencies([...currencies, ...currencies]);
+      setFilteredCurrencies(currencies);
     } else {
       setFilteredCurrencies(
         currencies.filter((currency) => {
@@ -99,7 +95,7 @@ export default function SelectToken({
         title="Select token"
         setCurrentScreen={setCurrentScreen}
       />
-      <div className="overflow-hidden overflow-scroll-auto">
+      <div>
         <fieldset className="Fieldset">
           <input
             className="Input"
@@ -111,7 +107,7 @@ export default function SelectToken({
             }}
           />
         </fieldset>
-        <div className="flex flex-col space-y-2 mt-3 hover:cursor-pointer">
+        <div className="flex flex-col space-y-2 mt-3 h-[300px] overflow-auto hover:cursor-pointer">
           {filteredCurrencies.map((currency) => {
             return (
               <div
