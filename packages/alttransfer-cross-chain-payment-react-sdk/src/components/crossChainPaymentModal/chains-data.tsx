@@ -10,11 +10,11 @@ import {
 
 export type chainsDataType = keyof typeof chainsData;
 export const chainsData = {
-  Polygon: <Polygon />,
-  Avalanche: <Avalanche />,
-  Arbitrum: <Arbitrum />,
-  Optimism: <Optimism />,
-  Fantom: <Fantom />,
-  Etherium: <Ethereum />,
-  Chain: <Circle />
+  Polygon: <Polygon className="rounded-full h-6 w-6" />,
+  Avalanche: <Avalanche className="rounded-full h-6 w-6" />,
+  Arbitrum: <Arbitrum className="rounded-full h-6 w-6" />,
+  Optimism: <Optimism className="rounded-full h-6 w-6" />,
+  Fantom: <Fantom className="rounded-full h-6 w-6" />,
+  Etherium: <Ethereum className="rounded-full h-6 w-6" />,
+  Chain: <Circle className="rounded-full h-6 w-6" />,
 };

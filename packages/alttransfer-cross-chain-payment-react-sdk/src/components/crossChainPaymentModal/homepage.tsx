@@ -1,6 +1,7 @@
 import React from "react";
 import { useAccount } from "wagmi";
 import { RightIconButton } from "../../assets/iconButtons";
+import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
@@ -19,6 +20,7 @@ export default function HomePage({
   brandName: string;
 }) {
   const { isConnected } = useAccount();
+  const { currency } = useCrossChainPayment();
 
   return (
     <>
@@ -36,7 +38,19 @@ export default function HomePage({
             style={{ opacity: isConnected ? "1" : "0.35" }}
             disabled={isConnected ? false : true}
           >
-            token
+            {currency.address ? (
+              <>
+                {currency.tokenUri && (
+                  <img
+                    className="h-6 w-6 rounded-full image-cover"
+                    src={currency.tokenUri}
+                  />
+                )}
+                {currency.symbol}
+              </>
+            ) : (
+              "token"
+            )}
           </button>
           <button
             className="HomepageSelectButton"
