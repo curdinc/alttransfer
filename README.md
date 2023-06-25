@@ -11,7 +11,7 @@ This package enables you to seamlessly accept payment from your user from any ch
 To get started, install the SDK
 
 ```bash
-npm install @alttransfer/cross-chain-payment-js-sdk @alttransfer/cross-chain-payment-react-sdk wagmi@1.2.1 viem@1.1.6
+npm install @alttransfer/cross-chain-payment-react-sdk wagmi@1.2.1 viem@1.1.6
 ```
 
 Once installed, we now configure wagmi for react. Refer to [wagmi docs](https://wagmi.sh/react/getting-started) for more information on the various settings
@@ -138,7 +138,7 @@ If you don't use react and still want the benefit of allowing your users to easi
 To get started, install the SDK
 
 ```bash
-npm install @alttransfer/cross-chain-payment-js-sdk @wagmi/core@1.2.1 viem@1.1.6
+npm install @alttransfer/cross-chain-payment-core @wagmi/core@1.2.1 viem@1.1.6
 ```
 
 Once installed, we now configure wagmi core. Refer to [wagmi docs](https://wagmi.sh/core/getting-started) for more information on the various settings
