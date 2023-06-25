@@ -5,27 +5,22 @@ import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
-import type { chainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
 
 export default function HomePage({
   setCurrentScreen,
-  curChain,
   costInfo,
-  brandName,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
-  curChain: string;
   costInfo: constInfoType;
-  brandName: string;
 }) {
   const { isConnected } = useAccount();
-  const { currency } = useCrossChainPayment();
+  const { currentChain, currency, sdk } = useCrossChainPayment();
 
   return (
     <>
       {/* FIRST ROW -> TITLE + CLOSE BUTTON */}
-      <NavBar title={brandName} setCurrentScreen={setCurrentScreen} />
+      <NavBar title={sdk.text.brandName} setCurrentScreen={setCurrentScreen} />
 
       {/* SECOND SECTION -> token / chain / cost */}
       <div className={`SectionContainer`}>
@@ -60,8 +55,8 @@ export default function HomePage({
             style={{ opacity: isConnected ? "1" : "0.35" }}
             disabled={isConnected ? false : true}
           >
-            {chainsData[curChain as chainsDataType]}
-            {curChain}
+            {chainsData[currentChain]}
+            {currentChain}
             {<RightIconButton />}
           </button>
         </div>

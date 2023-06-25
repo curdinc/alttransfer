@@ -8,7 +8,7 @@ import {
   Polygon,
 } from "../../assets/icons-chains";
 
-export type chainsDataType = keyof typeof chainsData;
+export type ChainsDataType = keyof typeof chainsData;
 export const chainsData = {
   Polygon: <Polygon className="rounded-full h-6 w-6" />,
   Avalanche: <Avalanche className="rounded-full h-6 w-6" />,

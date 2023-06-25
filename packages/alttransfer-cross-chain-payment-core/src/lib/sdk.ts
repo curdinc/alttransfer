@@ -23,7 +23,10 @@ export type AltTransferCrossChainSdkConstructorArgs = {
       }
   >;
   getRecipientAddress(this: void): Promise<{ address: string }>;
-
+  text: {
+    brandName: string;
+    paymentConfirmationText: string;
+  };
   config: {
     ChainAPIs: Record<"0x1" | "0x89", string>;
     alchemyApiKey: string;
@@ -34,6 +37,7 @@ export class AltTransferCrossChainSdk {
   private getItemPrice: AltTransferCrossChainSdkConstructorArgs["getItemPrice"];
   private getRecipientAddress: AltTransferCrossChainSdkConstructorArgs["getRecipientAddress"];
   private config: AltTransferCrossChainSdkConstructorArgs["config"];
+  text: AltTransferCrossChainSdkConstructorArgs["text"];
   /**
    * @example
    * const sdk = AltTransferCrossChainPaymentSdk({
@@ -61,6 +65,7 @@ export class AltTransferCrossChainSdk {
    * @param {AltTransferCrossChainSdkConstructorArgs["config"]} args.config - Miscellaneous configuration options.
    */
   constructor(args: AltTransferCrossChainSdkConstructorArgs) {
+    this.text = args.text;
     this.config = args.config;
     this.getItemPrice = args.getItemPrice;
     this.getRecipientAddress = args.getRecipientAddress;

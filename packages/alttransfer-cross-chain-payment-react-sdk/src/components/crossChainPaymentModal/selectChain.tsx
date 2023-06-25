@@ -1,18 +1,16 @@
 import React from "react";
+import { useCrossChainPayment } from "../CrossChainPaymentContext";
 import { pages } from "../CrossChainPaymentModal";
 import NavBar from "../navBar";
-import type { chainsDataType } from "./chains-data";
+import type { ChainsDataType } from "./chains-data";
 import { chainsData } from "./chains-data";
 
 export default function SelectChain({
   setCurrentScreen,
-  currentChain,
-  setCurrentChain,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
-  currentChain: string;
-  setCurrentChain: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const { currentChain, setCurrentChain } = useCrossChainPayment();
   return (
     <>
       <NavBar
@@ -20,20 +18,21 @@ export default function SelectChain({
         title="Select chain"
         setCurrentScreen={setCurrentScreen}
       />
-      {Object.keys(chainsData).map((item, i) => (
+      {Object.keys(chainsData).map((item) => (
         <button
+          key={item}
           className="ModifyWalletButton"
           style={{
             backgroundColor:
               item === currentChain ? "var(--secondary)" : "null",
           }}
           onClick={() => {
-            setCurrentChain(item);
+            setCurrentChain(item as ChainsDataType);
             setCurrentScreen(pages.HomeScreen);
           }}
         >
           <div className="headerText">{item}</div>
-          {chainsData[item as chainsDataType]}
+          {chainsData[item as ChainsDataType]}
         </button>
       ))}
     </>

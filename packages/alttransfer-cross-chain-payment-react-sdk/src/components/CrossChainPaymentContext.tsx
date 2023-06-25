@@ -4,6 +4,7 @@ import {
 } from "@alttransfer/cross-chain-payment-core";
 import { createContext, useContext, useState } from "react";
 import type { AltTransferCrossChainPaymentModalProps } from "./CrossChainPaymentModal";
+import { ChainsDataType } from "./crossChainPaymentModal/chains-data";
 
 const defaultCurrency: TokenInfo = {
   address: "",
@@ -22,6 +23,8 @@ const CrossChainContext = createContext<{
   sdk: AltTransferCrossChainSdk;
   currency: TokenInfo;
   setCurrency: React.Dispatch<React.SetStateAction<TokenInfo>>;
+  currentChain: ChainsDataType;
+  setCurrentChain: React.Dispatch<React.SetStateAction<ChainsDataType>>;
 }>({
   sdk: new AltTransferCrossChainSdk({
     config: {
@@ -43,21 +46,31 @@ const CrossChainContext = createContext<{
         address: "",
       });
     },
+    text: {
+      paymentConfirmationText: "Confirm payment",
+      brandName: "Your Brand name",
+    },
   }),
   currency: defaultCurrency,
   setCurrency: () => {},
+  currentChain: "Chain",
+  setCurrentChain: () => {},
 });
 export function CrossChainPaymentProvider({
   children,
   config,
   getItemPrice,
   getRecipientAddress,
+  text,
 }: AltTransferCrossChainPaymentModalProps) {
   const [currency, setCurrency] = useState<TokenInfo>(defaultCurrency);
+  const [currentChain, setCurrentChain] = useState<ChainsDataType>("Chain");
+
   const sdk = new AltTransferCrossChainSdk({
     config,
     getItemPrice,
     getRecipientAddress,
+    text,
   });
   return (
     <CrossChainContext.Provider
@@ -65,6 +78,8 @@ export function CrossChainPaymentProvider({
         sdk,
         currency,
         setCurrency,
+        currentChain,
+        setCurrentChain,
       }}
     >
       {children}
