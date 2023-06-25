@@ -1,8 +1,8 @@
 import { LiFi, type Route, type RoutesResponse } from "@lifi/sdk";
-import { ethers } from "ethers";
+import type { ethers } from "ethers";
 import { formatUnits, parseUnits } from "viem";
-import { SupportedChainIds } from "../../types/SupportedChainIds";
-import { TokenInfo } from "../../types/TokenInfo";
+import type { SupportedChainIds } from "../../types/SupportedChainIds";
+import type { TokenInfo } from "../../types/TokenInfo";
 
 /**
  *
@@ -68,22 +68,35 @@ export async function executeRoute(
             ) {
               resolve(updatedRoute.steps[0].execution?.process[0].txLink);
             }
+            if (
+              updatedRoute.steps[0]?.execution?.process[1]?.status === "DONE" &&
+              updatedRoute.steps[0]?.execution?.process[1]?.type ===
+                "CROSS_CHAIN"
+            ) {
+              resolve(updatedRoute.steps[10].execution?.process[1].txLink);
+            }
           } else if (
-            updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
-            updatedRoute.steps[1]?.execution?.process[1]?.type ===
+            updatedRoute.steps[0]?.execution?.process[1]?.status === "DONE" &&
+            updatedRoute.steps[0]?.execution?.process[1]?.type ===
               "RECEIVING_CHAIN"
           ) {
-            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+            resolve(updatedRoute.steps[0].execution?.process[1]?.txLink);
+          } else if (
+            updatedRoute.steps[0]?.execution?.process[2]?.status === "DONE" &&
+            updatedRoute.steps[0]?.execution?.process[2]?.type ===
+              "RECEIVING_CHAIN"
+          ) {
+            resolve(updatedRoute.steps[0].execution?.process[2]?.txLink);
           } else if (
             updatedRoute.steps[0]?.execution?.process[0]?.status === "DONE" &&
             updatedRoute.steps[0]?.execution?.process[0]?.type === "SWAP"
           ) {
-            resolve(updatedRoute.steps[0].execution?.process[1]?.txLink);
+            resolve(updatedRoute.steps[0].execution?.process[0]?.txLink);
           } else if (
-            updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
-            updatedRoute.steps[1]?.execution?.process[1]?.type === "SWAP"
+            updatedRoute.steps[0]?.execution?.process[1]?.status === "DONE" &&
+            updatedRoute.steps[0]?.execution?.process[1]?.type === "SWAP"
           ) {
-            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+            resolve(updatedRoute.steps[0].execution?.process[1]?.txLink);
           }
         },
       });

@@ -2,8 +2,7 @@
 
 import Button from '@/components/ui/Button';
 import { postData } from '@/utils/helpers';
-
-import { Session } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 
 interface Props {
