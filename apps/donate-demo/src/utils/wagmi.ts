@@ -1,5 +1,5 @@
 import { configureChains, createConfig } from "wagmi";
-import { goerli, mainnet } from "wagmi/chains";
+import { dogechain, evmos, goerli, mainnet, optimism, polygon } from "wagmi/chains";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
@@ -21,7 +21,7 @@ const walletConnectProjectId =
   process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, ...(process.env.NODE_ENV === "development" ? [goerli] : [])],
+  [mainnet, optimism, polygon, dogechain, evmos, ...(process.env.NODE_ENV === "development" ? [goerli] : [])],
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
     publicProvider(),
