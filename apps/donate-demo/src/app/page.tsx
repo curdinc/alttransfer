@@ -2,7 +2,6 @@
 
 import { AltTransferCrossChainPaymentModal } from "@alttransfer/cross-chain-payment-react-sdk";
 
-
 export default function Page() {
   return (
     <div>
@@ -21,12 +20,12 @@ export default function Page() {
             amount: "100000",
             chainId: "0xa",
             isNative: false,
-            tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            tokenAddress: "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
           });
         }}
         getRecipientAddress={async () => {
           return Promise.resolve({
-            address: "0x123",
+            address: "0xb3E9C57fB983491416a0C77b07629C0991c3FD59",
           });
         }}
         text={{
