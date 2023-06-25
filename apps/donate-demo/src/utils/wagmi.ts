@@ -47,7 +47,12 @@ export const config = createConfig({
     new InjectedConnector({
       chains,
       options: {
-        name: "Injected",
+        name: (detectedName) =>
+      `${
+        typeof detectedName === 'string'
+          ? detectedName
+          : detectedName.join(', ')
+      }`,
         shimDisconnect: true,
       },
     }),

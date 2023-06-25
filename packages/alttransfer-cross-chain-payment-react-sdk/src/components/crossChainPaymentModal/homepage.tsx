@@ -1,10 +1,11 @@
-import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CrossIconButton, RightIconButton } from "../../assets/iconButtons";
-import type { chainsDataType } from "./chains-data";
-import { chainsData } from "./chains-data";
+import React from "react";
+import { useAccount } from "wagmi";
 import type { constInfoType } from "../CrossChainPaymentModal";
 import { pages } from "../CrossChainPaymentModal";
+import type { chainsDataType } from "./chains-data";
+import { chainsData } from "./chains-data";
+import { CrossIconButton, RightIconButton } from "../../assets/iconButtons";
 import "./defaultmodal.css";
 
 export default function HomePage({
@@ -16,8 +17,8 @@ export default function HomePage({
   curChain: string;
   costInfo: constInfoType;
 }) {
-  // REPLACE THIS
-  const [isConnected, setIsConnected] = useState(false);
+
+  const { isConnected } = useAccount();
 
   return (
     <>

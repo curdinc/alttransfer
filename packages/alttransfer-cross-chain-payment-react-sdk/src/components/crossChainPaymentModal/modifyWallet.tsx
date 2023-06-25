@@ -1,29 +1,27 @@
-import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import { Circle } from "lucide-react";
+import { useConnect } from "wagmi";
 import { Coinbase, MetaMask, WalletConnect } from "../../assets/icons-wallets";
 import { CrossIconButton, LeftIconButton } from "../../assets/iconButtons";
 import { pages } from "../CrossChainPaymentModal";
 import "./defaultmodal.css";
-import { Circle } from "lucide-react";
 
-const randomShit = [
-  { title: "Metamask", icon: <MetaMask /> },
-  { title: "Coinbase Wallet", icon: <Coinbase /> },
-  {
-    title: "WalletConnect",
-    icon: <WalletConnect />,
-  },
-  {
-    title: "Other wallets",
-    icon: <Circle width={32} height={32} />,
-  },
-];
+
+let randomShit = new Map<string, JSX.Element>([
+  ["MetaMask", <MetaMask />],
+  ["Coinbase Wallet", <Coinbase />],
+  ["WalletConnect", <WalletConnect />],
+]);
+
+
 
 export default function ModifyWallet({
   setCurrentScreen,
 }: {
   setCurrentScreen: React.Dispatch<React.SetStateAction<pages>>;
 }) {
+  const { connect, connectors, error, isLoading, pendingConnector } =
+    useConnect()
   return (
     <>
       <div className="DialogHeading">
@@ -45,14 +43,37 @@ export default function ModifyWallet({
           </button>
         </Dialog.Close>
       </div>
-      {randomShit.map((item) => {
+      {connectors.map((connector) => (
+        <button
+          className="ModifyWalletButton"
+          disabled={!connector.ready}
+          key={connector.id}
+          onClick={() => {
+            connect({ connector });
+            setCurrentScreen(pages.HomeScreen);
+          }}
+        >
+          <div>
+            {connector.name}
+            {!connector.ready && ' (unsupported)'}
+            {isLoading &&
+              connector.id === pendingConnector?.id &&
+              ' (connecting)'}
+          </div>
+          {
+            randomShit.has(connector.name) ? randomShit.get(connector.name) : <Circle width={32} height={32} />
+          }
+        </button>
+      ))}
+
+      {/* {randomShit.map((item) => {
         return (
           <button className="ModifyWalletButton" key={item.title}>
             <div>{item.title}</div>
             {item.icon}
           </button>
         );
-      })}
+      })} */}
     </>
   );
 }
