@@ -8,7 +8,6 @@ import {
   polygon,
 } from "wagmi/chains";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
@@ -56,18 +55,6 @@ export const config = createConfig({
       chains,
       options: {
         projectId: walletConnectProjectId,
-      },
-    }),
-    new InjectedConnector({
-      chains,
-      options: {
-        name: (detectedName) =>
-          `${
-            typeof detectedName === "string"
-              ? detectedName
-              : detectedName.join(", ")
-          }`,
-        shimDisconnect: true,
       },
     }),
   ],
