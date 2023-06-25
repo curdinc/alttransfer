@@ -16,7 +16,7 @@ export const chainsID = new Map<string, SupportedChainIds>([
   ["Gnosis", "0x64"],
 ]);
 
-export const chainHex = new Set<string>(["89", "1", "a4b1", "a"]);
+export const chainHex = new Set<string>(["89", "1", "a4b1", "a", "64"]);
 
 export type ChainsDataType = keyof typeof chainsData;
 export const chainsData = {

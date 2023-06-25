@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseError } from "viem";
+import type { BaseError } from "viem";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 export function Connect() {

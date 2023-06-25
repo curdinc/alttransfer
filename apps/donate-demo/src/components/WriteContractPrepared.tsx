@@ -1,41 +1,41 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { BaseError } from 'viem'
+import { useState } from "react";
+import type { BaseError } from "viem";
 import {
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
-} from 'wagmi'
+} from "wagmi";
 
-import { wagmiContractConfig } from './contracts'
-import { useDebounce } from '../hooks/useDebounce'
-import { stringify } from '../utils/stringify'
+import { useDebounce } from "../hooks/useDebounce";
+import { stringify } from "../utils/stringify";
+import { wagmiContractConfig } from "./contracts";
 
 export function WriteContractPrepared() {
-  const [tokenId, setTokenId] = useState('')
-  const debouncedTokenId = useDebounce(tokenId)
+  const [tokenId, setTokenId] = useState("");
+  const debouncedTokenId = useDebounce(tokenId);
 
   const { config } = usePrepareContractWrite({
     ...wagmiContractConfig,
-    functionName: 'mint',
+    functionName: "mint",
     enabled: Boolean(debouncedTokenId),
     args: [BigInt(debouncedTokenId)],
-  })
-  const { write, data, error, isLoading, isError } = useContractWrite(config)
+  });
+  const { write, data, error, isLoading, isError } = useContractWrite(config);
   const {
     data: receipt,
     isLoading: isPending,
     isSuccess,
-  } = useWaitForTransaction({ hash: data?.hash })
+  } = useWaitForTransaction({ hash: data?.hash });
 
   return (
     <>
       <h3>Mint a wagmi</h3>
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          write?.()
+          e.preventDefault();
+          write?.();
         }}
       >
         <input
@@ -59,5 +59,5 @@ export function WriteContractPrepared() {
       )}
       {isError && <div>{(error as BaseError)?.shortMessage}</div>}
     </>
-  )
+  );
 }

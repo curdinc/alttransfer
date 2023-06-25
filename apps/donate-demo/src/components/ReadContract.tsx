@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BaseError } from "viem";
+import type { BaseError } from "viem";
 import { useContractRead, type Address } from "wagmi";
 
 import { wagmiContractConfig } from "./contracts";
