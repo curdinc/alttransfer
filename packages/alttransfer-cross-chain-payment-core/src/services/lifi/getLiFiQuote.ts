@@ -66,14 +66,14 @@ export async function executeRoute(
               updatedRoute.steps[0]?.execution?.process[0]?.type ===
                 "CROSS_CHAIN"
             ) {
-              resolve(updatedRoute.steps[1].execution?.process[0].txLink);
+              resolve(updatedRoute.steps[0].execution?.process[0].txLink);
             }
             if (
               updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
               updatedRoute.steps[1]?.execution?.process[1]?.type ===
                 "CROSS_CHAIN"
             ) {
-              resolve(updatedRoute.steps[1].execution?.process[0].txLink);
+              resolve(updatedRoute.steps[1].execution?.process[1].txLink);
             }
           } else if (
             updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
@@ -81,17 +81,17 @@ export async function executeRoute(
               "RECEIVING_CHAIN"
           ) {
             resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
-          }else if (
+          } else if (
             updatedRoute.steps[2]?.execution?.process[2]?.status === "DONE" &&
             updatedRoute.steps[2]?.execution?.process[2]?.type ===
               "RECEIVING_CHAIN"
           ) {
-            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+            resolve(updatedRoute.steps[2].execution?.process[2]?.txLink);
           } else if (
             updatedRoute.steps[0]?.execution?.process[0]?.status === "DONE" &&
             updatedRoute.steps[0]?.execution?.process[0]?.type === "SWAP"
           ) {
-            resolve(updatedRoute.steps[1].execution?.process[1]?.txLink);
+            resolve(updatedRoute.steps[0].execution?.process[0]?.txLink);
           } else if (
             updatedRoute.steps[1]?.execution?.process[1]?.status === "DONE" &&
             updatedRoute.steps[1]?.execution?.process[1]?.type === "SWAP"
